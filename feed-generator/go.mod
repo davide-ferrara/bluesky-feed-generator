@@ -2,15 +2,18 @@ module bsky-schwartz/feed-generator
 
 go 1.26.1
 
-replace bsky-schwartz/types => ../types
-
 require (
-	bsky-schwartz/types v0.0.0-00010101000000-000000000000
+	bsky-schwartz/db v0.0.0
+	bsky-schwartz/pkg/schwartz v0.0.0
 	github.com/bluesky-social/indigo v0.0.0-20260120225912-12d69fa4d209
 	github.com/joho/godotenv v1.5.1
 	github.com/openai/openai-go/v3 v3.30.0
 	github.com/revrost/go-openrouter v1.1.7
 )
+
+replace bsky-schwartz/db => ../db
+
+replace bsky-schwartz/pkg/schwartz => ../pkg/schwartz
 
 require (
 	github.com/earthboundkid/versioninfo/v2 v2.24.1 // indirect
@@ -38,6 +41,7 @@ require (
 	github.com/jbenet/goprocess v0.1.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-sqlite3 v1.14.40 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
 	github.com/mr-tron/base58 v1.2.0 // indirect
 	github.com/multiformats/go-base32 v0.1.0 // indirect

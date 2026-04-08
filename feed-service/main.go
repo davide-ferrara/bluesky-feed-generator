@@ -9,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	dbpkg "bsky-schwartz/db"
 )
 
 func main() {
@@ -16,11 +18,11 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 
 	// Inizializza database
-	if err := InitDatabase(); err != nil {
+	if err := dbpkg.Init("../data.db"); err != nil {
 		logger.Error("failed to initialize database", "err", err)
 		os.Exit(1)
 	}
-	defer CloseDatabase()
+	defer dbpkg.Close()
 
 	// Carica configurazione
 	cfg, err := LoadConfig()

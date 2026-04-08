@@ -1,0 +1,13 @@
+[project]
+name = "data-analysis"
+version = "0.1.0"
+description = "Benchmark tool for comparing AI models on Schwartz values"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "requests",
+    "scipy",
+    "seaborn",
+]

@@ -54,3 +54,5 @@ config.json.backup
 
 # Feed service test
 feed-service/test_feed.sh
+
+data.db*

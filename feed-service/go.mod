@@ -2,10 +2,13 @@ module bsky-schwartz
 
 go 1.26
 
-replace bsky-schwartz/types => ../types
+replace bsky-schwartz/pkg/schwartz => ../pkg/schwartz
+
+replace bsky-schwartz/db => ../db
 
 require (
-	bsky-schwartz/types v0.0.0-00010101000000-000000000000
+	bsky-schwartz/db v0.0.0
+	bsky-schwartz/pkg/schwartz v0.0.0
 	github.com/a-h/templ v0.3.1001
 	github.com/bluesky-social/indigo v0.0.0-20260318212431-cbaa83aee9dd
 	github.com/bytedance/gopkg v0.1.3
