@@ -28,6 +28,7 @@ bin/
 feed-generator/bin/
 feed-service/feed-service
 feed-publish/
+feed-generator/feed-generator
 
 # Logs
 logs/

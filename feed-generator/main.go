@@ -42,6 +42,14 @@ func main() {
 		AnalyzePosts()
 		os.Exit(0)
 
+	case "from-file":
+		if flag.NArg() < 2 {
+			fmt.Fprintf(os.Stderr, "Usage: feedgen from-file <urls.json>\n")
+			os.Exit(1)
+		}
+		FetchFromFile(flag.Arg(1))
+		os.Exit(0)
+
 	default:
 		fmt.Printf("Unknown command: %s\n", flag.Arg(0))
 		os.Exit(0)
