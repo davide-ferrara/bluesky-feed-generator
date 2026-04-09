@@ -9,11 +9,12 @@ import (
 )
 
 var (
-	collectLimit = flag.Int("n", 40, "Total posts to collect for feed (balanced across 4 clusters)")
-	limitFlag    = flag.Int("limit", 0, "Number of posts to analyze per model")
-	modelFlag    = flag.String("model", "", "Run analysis for specific model (partial name match)")
-	limitAnalyze = flag.Int("l", 0, "Limit posts to analyze")
-	langFlag     = flag.String("lang", "it", "Language filter for posts (e.g., it, en)")
+	collectLimit  = flag.Int("n", 40, "Total posts to collect for feed (balanced across 4 clusters)")
+	limitFlag     = flag.Int("limit", 0, "Number of posts to analyze per model")
+	modelFlag     = flag.String("model", "", "Run analysis for specific model (partial name match)")
+	limitAnalyze  = flag.Int("l", 0, "Limit posts to analyze")
+	langFlag      = flag.String("lang", "it", "Language filter for posts (e.g., it, en)")
+	analyzeImages = flag.Bool("images", true, "Include images in AI analysis")
 )
 
 func GetEnv(key string) string {
@@ -39,7 +40,7 @@ func main() {
 		os.Exit(0)
 
 	case "analyze":
-		AnalyzePosts()
+		AnalyzePosts(*modelFlag)
 		os.Exit(0)
 
 	case "from-file":

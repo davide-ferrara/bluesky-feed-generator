@@ -15,10 +15,9 @@ type ModelConfig struct {
 }
 
 var modelConfigs = []ModelConfig{
-	{Name: "gpt-4.1-mini", Provider: "openrouter", ModelID: "openai/gpt-4.1-mini"},
-	{Name: "mistral-14b", Provider: "openrouter", ModelID: "mistralai/ministral-14b-2512"},
-	{Name: "deepseek-v3.2", Provider: "siliconflow", ModelID: "deepseek-ai/DeepSeek-V3"},
-	{Name: "qwen3-vl-30b", Provider: "siliconflow", ModelID: "Qwen/Qwen3-VL-30B-A3B-Instruct"},
+	{Name: "gpt-4o-mini", Provider: "openrouter", ModelID: "openai/gpt-4o-mini"},
+	{Name: "ministral-8b", Provider: "openrouter", ModelID: "mistralai/ministral-8b-2512"},
+	{Name: "qwen3-vl-8b", Provider: "siliconflow", ModelID: "Qwen/Qwen3-VL-8B-Instruct"},
 }
 
 type Client struct {

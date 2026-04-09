@@ -11,14 +11,46 @@ import (
 	"bsky-schwartz/pkg/schwartz"
 )
 
-func AnalyzePosts() {
+func AnalyzePosts(modelFilter string) {
 	if err := db.Init("../data.db"); err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: could not init database: %v\n", err)
 		os.Exit(1)
 	}
 	defer db.Close()
 
-	posts, err := db.GetUnanalyzedPosts()
+	if err := initLogging(); err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: could not init logging: %v\n", err)
+		os.Exit(1)
+	}
+	defer closeLogging()
+
+	maxAnalysesPerModel := 5
+
+	filteredConfigs := modelConfigs
+	if modelFilter != "" {
+		filteredConfigs = filterModels(modelConfigs, modelFilter)
+		if len(filteredConfigs) == 0 {
+			fmt.Printf("No models match filter: %s\n", modelFilter)
+			fmt.Printf("Available models: ")
+			for i, cfg := range modelConfigs {
+				if i > 0 {
+					fmt.Print(", ")
+				}
+				fmt.Print(cfg.Name)
+			}
+			fmt.Println()
+			return
+		}
+		fmt.Printf("Filtering models by: %s\n", modelFilter)
+	}
+
+	// Get posts needing analysis for the first model in the filtered list
+	modelName := ""
+	if len(filteredConfigs) > 0 {
+		modelName = filteredConfigs[0].ModelID
+	}
+
+	posts, err := db.GetPostsNeedingAnalysis(modelName, maxAnalysesPerModel)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: could not get posts: %v\n", err)
 		os.Exit(1)
@@ -36,13 +68,41 @@ func AnalyzePosts() {
 		fmt.Printf("Limited to %d posts\n", len(posts))
 	}
 
-	for i, cfg := range modelConfigs {
-		fmt.Printf("\n[%d/%d] Model: %s (%s)\n", i+1, len(modelConfigs), cfg.Name, cfg.Provider)
+	fmt.Printf("Image analysis: %v\n", *analyzeImages)
+
+	for i, cfg := range filteredConfigs {
+		fmt.Printf("\n[%d/%d] Model: %s (%s)\n", i+1, len(filteredConfigs), cfg.Name, cfg.Provider)
 		fmt.Println("----------------------------------------")
 
-		var client AIClient
-		var err error
+		analysisCounts, err := db.GetPostCountForModel(cfg.ModelID)
+		if err != nil {
+			fmt.Printf("ERROR: could not get analysis counts: %v\n", err)
+			continue
+		}
 
+		var postsToAnalyze []schwartz.Post
+		var skippedPosts []string
+		for _, post := range posts {
+			count := analysisCounts[post.AtURI]
+			if count >= maxAnalysesPerModel {
+				skippedPosts = append(skippedPosts, post.AtURI)
+			} else {
+				postsToAnalyze = append(postsToAnalyze, post)
+			}
+		}
+
+		if len(skippedPosts) > 0 {
+			fmt.Printf("Skipped %d posts already having %d analyses for this model\n", len(skippedPosts), maxAnalysesPerModel)
+		}
+
+		if len(postsToAnalyze) == 0 {
+			fmt.Println("No posts to analyze for this model!")
+			continue
+		}
+
+		fmt.Printf("Analyzing %d posts for this model\n", len(postsToAnalyze))
+
+		var client AIClient
 		switch cfg.Provider {
 		case "openrouter":
 			client, err = GetOpenRouterClient()
@@ -58,7 +118,7 @@ func AnalyzePosts() {
 			continue
 		}
 
-		if err := runAnalysisForModel(client, posts, cfg.ModelID, cfg.Provider); err != nil {
+		if err := runAnalysisForModel(client, postsToAnalyze, cfg.ModelID, cfg.Provider, *analyzeImages); err != nil {
 			fmt.Printf("ERROR: Analysis failed: %v\n", err)
 		}
 	}
@@ -68,7 +128,7 @@ func AnalyzePosts() {
 	fmt.Println("========================================")
 }
 
-func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, provider string) error {
+func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, provider string, analyzeImages bool) error {
 	startTime := time.Now()
 
 	for i := range posts {
@@ -77,7 +137,7 @@ func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, p
 
 		ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 
-		analysis, err := CalculateRating(ctx, client, model, &posts[i])
+		analysis, err := CalculateRating(ctx, client, model, &posts[i], analyzeImages)
 		if err != nil {
 			posts[i].ValueAnalysis.Error = err.Error()
 			fmt.Printf("  [Post %d/%d] ERROR: %v\n", i+1, len(posts), err)
@@ -87,6 +147,8 @@ func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, p
 				i+1, len(posts),
 				analysis.Stats.TotalTokens,
 				time.Since(postStart).Round(time.Millisecond))
+
+			logAnalysis(posts[i].AtURI, model, analysis.Rating, analysis.Reasoning, analysis.Stats)
 
 			if err := db.SaveAnalysis(posts[i].AtURI, model, provider, *analysis); err != nil {
 				fmt.Printf("  ERROR saving analysis: %v\n", err)

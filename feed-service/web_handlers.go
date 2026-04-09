@@ -1,14 +1,15 @@
 package main
 
 import (
+	"bsky-schwartz/internal/bsky"
+	"bsky-schwartz/internal/models"
+	"bsky-schwartz/views"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"bsky-schwartz/internal/bsky"
-	"bsky-schwartz/internal/models"
-	"bsky-schwartz/views"
+	dbpkg "bsky-schwartz/db"
 
 	"github.com/bytedance/gopkg/util/logger"
 	"github.com/gin-contrib/sessions"
@@ -42,21 +43,12 @@ func RootHandler(c *gin.Context) {
 	// Get username from session
 	username := GetSessionString(session, "username")
 
-	// Get weights from shared memory first (fastest)
-	weights := GlobalUserWeights.Get(userDID)
-
-	// Fallback: try SQLite (fast local DB)
-	if weights == nil {
-		dbDID, dbWeights, err := GetUserFromDB(user.Handle)
+	// Load weights from SQLite
+	var weights map[string]float64
+	if userDID != "" {
+		dbWeights, err := dbpkg.GetWeightsByDID(userDID)
 		if err == nil && len(dbWeights) > 0 {
-			fmt.Println("WEIGHTS caricati da SQLite")
 			weights = dbWeights
-			if userDID == "" && dbDID != "" {
-				userDID = dbDID
-				session.Set("userDID", userDID)
-			}
-			// Update global cache
-			GlobalUserWeights.Set(userDID, weights)
 		}
 	}
 
@@ -73,7 +65,7 @@ func RootHandler(c *gin.Context) {
 	}
 
 	// Only fetch from Bluesky if we have no weights at all
-	if weights == nil || len(weights) == 0 {
+	if len(weights) == 0 {
 		client, err := bsky.NewClient(user.Handle, user.AppPassword)
 		if err != nil {
 			fmt.Println(err)
@@ -111,9 +103,7 @@ func RootHandler(c *gin.Context) {
 
 		// Save to SQLite
 		SaveUser(user.Handle, userDID)
-		SaveWeights(user.Handle, weights)
-		// Save to global cache
-		GlobalUserWeights.Set(userDID, weights)
+		SaveWeights(userDID, weights)
 	}
 
 	// Get flash message
@@ -244,9 +234,6 @@ func LoginPostHandler(c *gin.Context) {
 		}
 	}
 
-	// Save weights in shared memory
-	GlobalUserWeights.Set(userDID, weights)
-
 	// Also save in session for backwards compatibility
 	if data, err := json.Marshal(weights); err == nil {
 		session.Set("weights", data)
@@ -341,15 +328,11 @@ func PreferencesHandler(c *gin.Context) {
 	// Get user DID
 	userDID := GetSessionString(session, "userDID")
 
-	// Save in shared memory (storage) - first priority
-	GlobalUserWeights.Set(userDID, weights)
-	fmt.Println("WEIGHTS salvati in storage")
-
-	// Save in SQLite (database) - second priority
+	// Save in SQLite (database)
 	if err := SaveUser(user.Handle, userDID); err != nil {
 		fmt.Println("ERRORE - Salvataggio utente in SQLite:", err)
 	}
-	if err := SaveWeights(user.Handle, weights); err != nil {
+	if err := SaveWeights(userDID, weights); err != nil {
 		fmt.Println("ERRORE - Salvataggio pesi in SQLite:", err)
 	}
 	fmt.Println("WEIGHTS salvati in SQLite")
@@ -367,10 +350,10 @@ func PreferencesHandler(c *gin.Context) {
 
 	// Save weights to PDS (Bluesky protocol) - async, non-blocking
 	go func() {
-		if err := bsky.SaveWeights(context.Background(), &client, user.Handle, weights); err != nil {
-			fmt.Printf("ERRORE async - Salvataggio PDS fallito per %s: %v\n", user.Handle, err)
+		if err := bsky.SaveWeights(context.Background(), &client, userDID, weights); err != nil {
+			fmt.Printf("ERRORE async - Salvataggio PDS fallito per %s: %v\n", userDID, err)
 		} else {
-			fmt.Printf("WEIGHTS salvati nel PDS (async) per %s\n", user.Handle)
+			fmt.Printf("WEIGHTS salvati nel PDS (async) per %s\n", userDID)
 		}
 	}()
 

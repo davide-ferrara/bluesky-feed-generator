@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bsky-schwartz/internal/models"
+	"bsky-schwartz/pkg/schwartz"
 	"context"
 	"fmt"
 	"math"
@@ -10,8 +12,6 @@ import (
 	"time"
 
 	dbpkg "bsky-schwartz/db"
-	"bsky-schwartz/internal/models"
-	"bsky-schwartz/pkg/schwartz"
 
 	"github.com/bluesky-social/indigo/api/bsky"
 )
@@ -21,9 +21,9 @@ type AlgoHandler func(ctx context.Context, limit int, cursor string, userDID str
 
 // Algos - Registro degli algoritmi disponibili
 var Algos = map[string]AlgoHandler{
-	// "values":     feedValueBased,
+	"values": feedValueBased,
 	// "engagement": feedEngagement,
-	"values": feedEngagement,
+	// "values": feedEngagement,
 }
 
 // =============================================================================
@@ -33,12 +33,15 @@ var Algos = map[string]AlgoHandler{
 // GetFeedPosts returns posts, optionally including unanalyzed posts
 // includeUnanalyzed: if true, returns ALL posts (analyzed + unanalyzed)
 //
-//	if false, returns only posts with analysis
+//	if false, returns only posts with analysis (averaged by model)
 func GetFeedPosts(includeUnanalyzed bool) ([]schwartz.Post, error) {
 	if includeUnanalyzed {
 		return dbpkg.GetAllPosts()
 	}
-	return dbpkg.GetPostsWithAnalysis("openai/gpt-4.1-mini")
+	// TODO: Let the user select it from the webapp
+	model := "ministral"
+	fmt.Println("Using model:", model)
+	return dbpkg.GetPostsWithAnalysisAveraged(model)
 }
 
 // =============================================================================
@@ -52,10 +55,13 @@ func jsonKeyToWeightKey(jsonKey string) string {
 // CalculateScore - Calcola lo score di un post rispetto ai weights
 func CalculateScore(posts []schwartz.Post, weights map[string]float64) {
 	for i := range posts {
-		var score int
-		for key, rating := range posts[i].ValueAnalysis.Rating {
-			score += rating * int(weights[strings.ToLower(key)])
+		var score float64
+		for k, v := range posts[i].ValueAnalysis.Rating {
+			w := weights[k]
+			// fmt.Printf("[DEBUG] %s: V=%d, W=%.2f, contribution=%.2f\n", post.URL, v, w, float64(v)*w)
+			score += float64(v) * w
 		}
+		// fmt.Println("=================")
 		posts[i].ValueAnalysis.Score = score
 	}
 }
@@ -93,7 +99,7 @@ func feedEngagement(ctx context.Context, limit int, cursor string, userDID strin
 	}
 
 	for i := range posts {
-		posts[i].ValueAnalysis.Score = calculateEngagementScore(posts[i])
+		posts[i].ValueAnalysis.Score = float64(calculateEngagementScore(posts[i]))
 	}
 
 	sort.Slice(posts, func(i, j int) bool {
@@ -137,24 +143,44 @@ func feedEngagement(ctx context.Context, limit int, cursor string, userDID strin
 
 // feedValueBased - Feed basato sui values Schwartz
 func feedValueBased(ctx context.Context, limit int, cursor string, userDID string) (*bsky.FeedGetFeedSkeleton_Output, error) {
-	weights := GlobalUserWeights.Get(userDID)
-	if weights == nil {
+	// Load weights from database
+	var weights map[string]float64
+	dbWeights, err := dbpkg.GetWeightsByDID(userDID)
+	if err == nil && len(dbWeights) > 0 {
+		weights = dbWeights
+		fmt.Printf("[DEBUG] Loaded weights for user %s from DB: %v\n", userDID, weights)
+	} else {
 		weights = make(map[string]float64)
 		for _, v := range models.SwartzValues {
 			weights[v.ID] = 0.0
 		}
+		fmt.Printf("[DEBUG] No weights for user %s, using default weights (all zeros)\n", userDID)
 	}
 
 	posts, err := GetFeedPosts(false) // solo post analizzati
 	if err != nil {
+		fmt.Printf("[ERROR] loading feed: %v\n", err)
 		return nil, fmt.Errorf("loading feed: %w", err)
+	}
+
+	fmt.Printf("[DEBUG] GetFeedPosts returned %d posts\n", len(posts))
+
+	if len(posts) == 0 {
+		fmt.Println("[DEBUG] No posts to return")
+		return &bsky.FeedGetFeedSkeleton_Output{Feed: []*bsky.FeedDefs_SkeletonFeedPost{}}, nil
 	}
 
 	CalculateScore(posts, weights)
 
+	// Sort by socre
 	sort.Slice(posts, func(i, j int) bool {
 		return posts[i].ValueAnalysis.Score > posts[j].ValueAnalysis.Score
 	})
+
+	// Log top scored posts
+	for i := 0; i < 5 && i < len(posts); i++ {
+		fmt.Printf("[DEBUG] Post %d: score=%.2f, text=%.50s...\n", i+1, posts[i].ValueAnalysis.Score, posts[i].Text)
+	}
 
 	startIdx := 0
 	if cursor != "" {

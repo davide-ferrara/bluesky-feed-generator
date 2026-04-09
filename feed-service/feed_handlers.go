@@ -56,7 +56,6 @@ func handleGetFeedSkeleton(cfg *Config, logger *slog.Logger) http.HandlerFunc {
 
 		// TODO: IMPROVE JWT PASRING
 		if auth := r.Header.Get("Authorization"); auth != "" {
-			fmt.Println(auth)
 
 			parts := strings.Split(auth, " ")
 			tokenStr := parts[1]
@@ -64,7 +63,7 @@ func handleGetFeedSkeleton(cfg *Config, logger *slog.Logger) http.HandlerFunc {
 			parser := jwt.NewParser()
 			token, _, err := parser.ParseUnverified(tokenStr, jwt.MapClaims{})
 			if err != nil {
-				logger.Warn("Error in parsing JWT")
+				logger.Warn("Error in parsing JWT:", err)
 			}
 
 			claims, ok := token.Claims.(jwt.MapClaims)
@@ -79,7 +78,7 @@ func handleGetFeedSkeleton(cfg *Config, logger *slog.Logger) http.HandlerFunc {
 			}
 		}
 
-		fmt.Println("REQEUST FROM:", userDID)
+		fmt.Println("[DEBUG] REQEUST FROM:", userDID)
 
 		feedParam := r.URL.Query().Get("feed")
 		if feedParam == "" {

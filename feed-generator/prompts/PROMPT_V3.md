@@ -43,7 +43,7 @@ Return a JSON object with exactly TWO fields:
 CRITICAL: "Reasoning" MUST be a single string value, NOT an object. Do NOT include per-value reasoning fields.
 
 Example format:
-{"Rating": {"Reputation": 0, "Power": 2, "Wealth": 1, "Achievement": 0, "Pleasure": 0, "Independent thoughts": 0, "Independent actions": 0, "Stimulation": 3, "Personal security": 0, "Societal security": 0, "Tradition": 0, "Lawfulness": 0, "Respect": 0, "Humility": 0, "Responsibility": 5, "Caring": 4, "Equality": 5, "Nature": 0, "Tolerance": 3}, "Reasoning": "This is a single string explaining the overall reasoning."}
+{"Rating": {"reputation": 0, "power": 2, "wealth": 1, "achievement": 0, "pleasure": 0, "independent_thoughts": 0, "independent_actions": 0, "stimulation": 3, "personal_security": 0, "societal_security": 0, "tradition": 0, "lawfulness": 0, "respect": 0, "humility": 0, "responsibility": 5, "caring": 4, "equality": 5, "nature": 0, "tolerance": 3}, "Reasoning": "This is a single string explaining the overall reasoning."}
 
 ## Examples
 
@@ -52,7 +52,7 @@ Example format:
    Initiative on Women's Health Research will work towards that goal, changing
    how we approach and fund women's health research.
 
-{"Rating": {"Reputation": 0, "Power": 0, "Wealth": 0, "Achievement": 0, "Pleasure": 0, "Independent thoughts": 0, "Independent actions": 0, "Stimulation": 0, "Personal security": 0, "Societal security": 0, "Tradition": 0, "Lawfulness": 0, "Respect": 0, "Humility": 0, "Responsibility": 5, "Caring": 4, "Equality": 5, "Nature": 0, "Tolerance": 3}, "Reasoning": "The post emphasizes responsibility through healthcare initiatives and caring for women's health needs."}
+{"Rating": {"reputation": 0, "power": 0, "wealth": 0, "achievement": 0, "pleasure": 0, "independent_thoughts": 0, "independent_actions": 0, "stimulation": 0, "personal_security": 0, "societal_security": 0, "tradition": 0, "lawfulness": 0, "respect": 0, "humility": 0, "responsibility": 5, "caring": 4, "equality": 5, "nature": 0, "tolerance": 3}, "Reasoning": "The post emphasizes responsibility through healthcare initiatives and caring for women's health needs."}
 
 2. Post: This little kid was carrying a white flag, and now he's dead. This guy
    was also carrying a white flag, and he's been shot. I'm here filming for you,
@@ -61,7 +61,7 @@ Example format:
    white flags getting INTENTIONALLY targeted is true, this would be a WAR
    CRIME.
 
-{"Rating": {"Reputation": 0, "Power": 0, "Wealth": 0, "Achievement": 0, "Pleasure": 0, "Independent thoughts": 0, "Independent actions": 0, "Stimulation": 0, "Personal security": 0, "Societal security": 0, "Tradition": 0, "Lawfulness": 0, "Respect": 0, "Humility": 0, "Responsibility": 0, "Caring": 6, "Equality": 5, "Nature": 0, "Tolerance": 3}, "Reasoning": "The post reflects strong caring and equality values through reporting on civilian suffering and potential war crimes."}
+{"Rating": {"reputation": 0, "power": 0, "wealth": 0, "achievement": 0, "pleasure": 0, "independent_thoughts": 0, "independent_actions": 0, "stimulation": 0, "personal_security": 0, "societal_security": 0, "tradition": 0, "lawfulness": 0, "respect": 0, "humility": 0, "responsibility": 0, "caring": 6, "equality": 5, "nature": 0, "tolerance": 3}, "Reasoning": "The post reflects strong caring and equality values through reporting on civilian suffering and potential war crimes."}
 
 2. Post: This little kid was carrying a white flag, and now he’s dead. This guy
    was also carrying a white flag, and he’s been shot. I’m here filming for you,
@@ -70,9 +70,4 @@ Example format:
    white flags getting INTENTIONALLY targeted is true, this would be a WAR
    CRIME.
 
-{"Rating": {"Reputation": 0, "Power": 0, "Wealth": 0, "Achievement": 0,
-"Pleasure": 0, "Independent thoughts": 0, "Independent actions": 0,
-"Stimulation": 0, "Personal security": 0, "Societal security": 0, "Tradition":
-0, "Lawfulness": 0, "Respect": 0, "Humility": 0, "Responsibility": 0, "Caring":
-6, "Equality": 5, "Nature": 0, "Tolerance": 3}, "Reasoning": "YOUR BRIEF
-EXPLANATION"}
+{"Rating": {"reputation": 0, "power": 0, "wealth": 0, "achievement": 0, "pleasure": 0, "independent_thoughts": 0, "independent_actions": 0, "stimulation": 0, "personal_security": 0, "societal_security": 0, "tradition": 0, "lawfulness": 0, "respect": 0, "humility": 0, "responsibility": 0, "caring": 6, "equality": 5, "nature": 0, "tolerance": 3}, "Reasoning": "YOUR BRIEF EXPLANATION"}

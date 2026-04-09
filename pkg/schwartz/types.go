@@ -15,7 +15,7 @@ type AIStats struct {
 type ValueAnalysis struct {
 	Rating    SchwartzValues `json:"Rating"`
 	Reasoning string         `json:"Reasoning"`
-	Score     int            `json:"Score"`
+	Score     float64        `json:"Score"`
 	Stats     AIStats        `json:"Stats"`
 	Model     string         `json:"Model,omitempty"`
 	Provider  string         `json:"Provider,omitempty"`
