@@ -1,0 +1,13 @@
+{
+  "profiles": [
+    {"name": "Daily Stoic", "type": "humility", "url": "https://bsky.app/profile/daily-stoic.bsky.social", "limit": 40},
+    {"name": "Pope Francis", "type": "humility", "url": "https://bsky.app/profile/pontifexeng.bsky.social", "limit": 30},
+    {"name": "Stoic Quotes", "type": "humility", "url": "https://bsky.app/profile/stoicquotes.bsky.social", "limit": 30},
+    {"name": "Brené Brown", "type": "humility", "url": "https://bsky.app/profile/brenebrown.bsky.social", "limit": 20},
+    {"name": "Nature", "type": "nature", "url": "https://bsky.app/profile/nature.com", "limit": 30},
+    {"name": "Nature Conservancy", "type": "nature", "url": "https://bsky.app/profile/nature.org", "limit": 30},
+    {"name": "Rob Crank Nature", "type": "nature", "url": "https://bsky.app/profile/robcrank68.bsky.social", "limit": 30},
+    {"name": "Climate WWF", "type": "nature", "url": "https://bsky.app/profile/climatewwf.bsky.social", "limit": 20},
+    {"name": "Greenpeace", "type": "nature", "url": "https://bsky.app/profile/greenpeace.org", "limit": 20}
+  ]
+}
