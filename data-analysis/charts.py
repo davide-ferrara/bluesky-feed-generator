@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 from matplotlib.patches import Patch
 from typing import Optional
 
@@ -37,16 +38,13 @@ SCHWARTZ_CLUSTERS = {
 
 MODEL_COLORS = {
     "GPT": "#27AE60",
-    "GPT-4.1-mini": "#27AE60",
+    "GPT-4o-mini": "#27AE60",
     "Mistral": "#FF6B35",
-    "Mistral-14b": "#FF6B35",
-    "ministral-14b": "#FF6B35",
+    "Ministral-8b": "#FF6B35",
+    "Qwen": "#3498DB",
+    "Qwen3": "#3498DB",
     "DeepSeek": "#2E86AB",
     "DeepSeek-V3": "#2E86AB",
-    "deepseek-v3": "#2E86AB",
-    "Qwen": "#8E44AD",
-    "Qwen3": "#8E44AD",
-    "Qwen3-VL-30B": "#8E44AD",
 }
 
 
@@ -324,3 +322,175 @@ def plot_response_time_comparison(
     plt.close()
 
     print(f"Response time chart saved to: {output_path}")
+
+
+def plot_score_distribution_heatmap(
+    distributions: dict[str, dict[str, dict[str, float]]],
+    output_path: str,
+    title: str = "Score Distribution: % of Posts with Zero Scores",
+) -> None:
+    """
+    Generate a heatmap showing % of zero scores for each value across models.
+
+    Args:
+        distributions: {
+            "Model1": {
+                "Caring": {"pct_zeros": 61.1, "pct_mid": 22.2, "pct_high": 16.7},
+                ...
+            },
+            "Model2": {...}
+        }
+        output_path: Where tosave the PNG
+        title: Title for the plot
+    """
+    models = list(distributions.keys())
+
+    # Get all values from first model (order matters)
+    first_model = models[0]
+    values = list(distributions[first_model].keys())
+
+    # Create matrix: rows = values, columns = models
+    # Cell value = % zeros
+    data = np.zeros((len(values), len(models)))
+
+    for j, model in enumerate(models):
+        for i, value in enumerate(values):
+            data[i, j] = distributions[model][value]["pct_zeros"]
+
+    # Create figure
+    fig, ax = plt.subplots(figsize=(10, 12))
+
+    # Custom colormap: green (low zeros = good) -> yellow -> red (high zeros = bad)
+    cmap = sns.diverging_palette(145, 10, as_cmap=True)  # Green to red
+
+    # Create heatmap
+    im = ax.imshow(data, cmap=cmap, aspect="auto", vmin=0, vmax=100)
+
+    # Colorbar
+    cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.ax.set_ylabel(
+        "% Posts with Zero Score",
+        rotation=-90,
+        va="bottom",
+        fontsize=11,
+        fontweight="bold",
+    )
+
+    # Set ticks
+    ax.set_xticks(np.arange(len(models)))
+    ax.set_yticks(np.arange(len(values)))
+
+    # Labels
+    ax.set_xticklabels(models, fontsize=11, fontweight="bold")
+    ax.set_yticklabels(values, fontsize=10, fontweight="bold")
+
+    # Rotate xlabels
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+    # Add text annotations
+    for i in range(len(values)):
+        for j in range(len(models)):
+            pct = data[i, j]
+            text = ax.text(
+                j,
+                i,
+                f"{pct:.0f}%",
+                ha="center",
+                va="center",
+                fontsize=9,
+                fontweight="bold",
+                color="white" if pct > 50 else "black",
+            )
+
+    ax.set_title(title, fontsize=14, fontweight="bold", pad=20)
+
+    # Add interpretation note
+    ax.text(
+        0.5,
+        -0.12,
+        "More zeros = Conservative model (fewer values detected)\n"
+        "Fewer zeros = Nuanced model (uses full 0-6 range)",
+        transform=ax.transAxes,
+        ha="center",
+        fontsize=9,
+        style="italic",
+        color="gray",
+    )
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    print(f"Score distribution heatmap saved to: {output_path}")
+
+
+def plot_total_score_histogram(
+    score_data: dict[str, list[int]],
+    output_path: str,
+    title: str = "Total Score Distribution by Model",
+) -> None:
+    """
+    Generate histogram showing distribution of total scores across models.
+    
+    Args:
+        score_data: {"Model1": [score1, score2, ...], "Model2": [...]}
+        output_path: Where to save the PNG
+        title: Title for the plot
+    """
+    models = list(score_data.keys())
+    
+    fig, ax = plt.subplots(figsize=(12, 7))
+    
+    # Colors for each model
+    colors = ['#27AE60', '#FF6B35', '#3498DB', '#9B59B6', '#E74C3C', '#F39C12']
+    
+    # Plot histogram for each model
+    for i, model in enumerate(models):
+        scores = score_data[model]
+        if len(scores) == 0:
+            continue
+        
+        # Calculate statistics
+        avg = sum(scores) / len(scores) if scores else 0
+        min_score = min(scores) if scores else 0
+        max_score = max(scores) if scores else 0
+        
+        # Plot histogram with transparency
+        ax.hist(
+            scores,
+            bins=range(0, 115, 5),  # Bins of 5 points
+            alpha=0.5,
+            label=f"{model} (avg: {avg:.1f}, n={len(scores)})",
+            color=colors[i % len(colors)],
+            edgecolor='black',
+            linewidth=0.5
+        )
+    
+    ax.set_xlabel('Total Score (sum of 19 values)', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Number of Posts', fontsize=12, fontweight='bold')
+    ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+    ax.set_xlim(0, 114)
+    
+    # Add legend
+    ax.legend(loc='upper right', frameon=True, fontsize=10)
+    
+    # Add grid
+    ax.grid(axis='y', alpha=0.3)
+    
+    # Add interpretation note
+    ax.text(
+        0.5, -0.1,
+        "Lower scores = Posts with fewer values expressed\n"
+        "Higher scores = Posts with more values expressed (0-114 range)",
+        transform=ax.transAxes,
+        ha='center',
+        fontsize=9,
+        style='italic',
+        color='gray'
+    )
+    
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    
+    print(f"Total score histogram saved to: {output_path}")

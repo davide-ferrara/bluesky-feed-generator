@@ -1,0 +1,140 @@
+================================================================================
+OUTLIER ANALYSIS FOR: mistralai/ministral-8b-2512
+================================================================================
+
+Statistics:
+  Total posts: 18
+  Mean total score: 17.00
+  Std deviation: 9.12
+  High outlier threshold: 35.25
+  Low outlier threshold: 0.00
+
+================================================================================
+HIGH OUTLIERS (Top 10 posts by total score)
+================================================================================
+
+[1] Total Score: 36
+Post: Muore Robert Mueller, uomo integerrimo, un uomo di un’America che purtroppo quasi non c’è più, e il presidente americano Trump commenta: “Sono content...
+Reasoning: The post strongly critiques Trump's leadership and the erosion of American values, implying deep concern for societal security (6) and equality (6) as core threats. The mention of 'civiltà' (civilizat...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 2, 'Societal Sec': 6, 'Tradition': 0, 'Lawfulness': 5, 'Respect': 5, 'Humility': 0, 'Responsibility': 4, 'Caring': 5, 'Equality': 6, 'Nature': 0, 'Tolerance': 3}
+
+[2] Total Score: 35
+Post: Domani a #Brescia si terrà l'incontro "Prevenire e contrastare il discorso d'odio", con un focus sul termine tristemente attuale "remigrazione".
+
+L'in...
+Reasoning: The post promotes a civic event addressing hate speech and 'remigration,' strongly emphasizing equality (6) through combating discriminatory language and systemic issues. Caring (5) and responsibility...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 2, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 1, 'Personal Sec': 0, 'Societal Sec': 3, 'Tradition': 1, 'Lawfulness': 2, 'Respect': 4, 'Humility': 1, 'Responsibility': 5, 'Caring': 5, 'Equality': 6, 'Nature': 0, 'Tolerance': 5}
+
+[3] Total Score: 31
+Post: La transizione energetica è una delle sfide più grandi del nostro tempo, e il nucleare pulito si sta affermando come una soluzione promettente per gar...
+Reasoning: The post discusses the role of clean nuclear energy in addressing energy sustainability, emphasizing its potential as a solution for future energy needs. Strong emphasis on nature (5) due to the focus...
+Values: {'Reputation': 1, 'Power': 1, 'Wealth': 0, 'Achievement': 4, 'Pleasure': 1, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 3, 'Societal Sec': 4, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 2, 'Humility': 0, 'Responsibility': 3, 'Caring': 2, 'Equality': 2, 'Nature': 5, 'Tolerance': 1}
+
+[4] Total Score: 28
+Post: Negata sala convegni al comitato di estrema destra 'Remigrazione'...
+Reasoning: The post explicitly denounces the denial of a conference room to an extremist group ('Remigrazione'), reflecting strong societal security concerns (5) due to the political nature and potential societa...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 5, 'Tradition': 0, 'Lawfulness': 5, 'Respect': 5, 'Humility': 0, 'Responsibility': 4, 'Caring': 0, 'Equality': 6, 'Nature': 0, 'Tolerance': 3}
+
+[5] Total Score: 21
+Post: Ponte sullo Stretto, l’Ad Ciucci “Lavori al via in estate”
+
+ROMA (ITALPRESS) – L’amministratore delegato di Stretto di Messina, Pietro Ciucci, intervi...
+Reasoning: The post discusses the progress of the Messina Strait Bridge project, highlighting the administrator's role and the upcoming construction start. Strong achievement (5) is evident through the project's...
+Values: {'Reputation': 2, 'Power': 4, 'Wealth': 3, 'Achievement': 5, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 1, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 1, 'Humility': 0, 'Responsibility': 3, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[6] Total Score: 19
+Post: Tutti i cittadini hanno pari dignità sociale e sono eguali davanti alla legge, senza distinzioni di #sesso, di #razza, di #lingua, di #religione, di #...
+Reasoning: The post strongly emphasizes equality (6) by affirming legal and social parity for all citizens regardless of sex, race, language, religion, political opinions, or personal/social conditions. Lawfulne...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 5, 'Respect': 4, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 6, 'Nature': 0, 'Tolerance': 4}
+
+[7] Total Score: 18
+Post: Non esistono cose/obiettivi facili ma solo cose/obiettivi raggiungibili. Se fosse facile non sarebbe reale. E le soddisfazioni sono grandiose #network...
+Reasoning: The post strongly emphasizes achievement (6) through its focus on 'successo' and 'determinazione,' framing challenges as motivating rather than discouraging. Independent action (5) is implied by the i...
+Values: {'Reputation': 3, 'Power': 2, 'Wealth': 0, 'Achievement': 6, 'Pleasure': 2, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 1, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 4, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[8] Total Score: 14
+Post: Buon pomeriggio anime lievi.
+
+Prima fase di quando si inizia un percorso di crescita personale e fisica, aggiungerei, la motivazione è altissima, la s...
+Reasoning: The post reflects moderate independent action (4) and achievement (5) in starting a personal/fitness growth journey. Stimulation (3) is implied by the excitement of a new phase, while pleasure (2) and...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 5, 'Pleasure': 2, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 3, 'Personal Sec': 1, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 2, 'Caring': 1, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[9] Total Score: 13
+Post: Non sarà l’mvp come ha recentemente proclamato, ma Jayson Tatum merita di sicuro di essere nella conversazione e di stare nella top 5.
+
+Mette la squad...
+Reasoning: The post strongly emphasizes achievement (5) by discussing Jayson Tatum's elite status in the NBA, framing him as a top-tier player worthy of top-5 consideration despite not being the MVP. Stimulation...
+Values: {'Reputation': 2, 'Power': 1, 'Wealth': 0, 'Achievement': 5, 'Pleasure': 2, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 3, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[10] Total Score: 13
+Post: Il segreto dietro l'espresso italiano ha un nome preciso: #Trieste.
+Quella tazzina che molti di noi sorseggiano ogni mattina ha una storia che pochi c...
+Reasoning: The post strongly emphasizes tradition (5) through the historical reference to Trieste's 1719 role in Italian coffee culture. Pleasure (3) is implied by the enjoyment of morning espresso, while subtle...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 3, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 5, 'Lawfulness': 0, 'Respect': 2, 'Humility': 0, 'Responsibility': 0, 'Caring': 1, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+================================================================================
+LOW OUTLIERS (Bottom 10 posts by total score)
+================================================================================
+
+[1] Total Score: 8
+Post: Trump taglia 175 milioni all’università della Pennsylvania: “Ha fatto gareggiare atleta transgender”...
+Reasoning: The post strongly reflects Trump's assertion of power (5) through the decision to cut funding, framed as an exercise of authority. There's a subtle implication of reputation (2) in the public stance, ...
+Values: {'Reputation': 2, 'Power': 5, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 1, 'Nature': 0, 'Tolerance': 0}
+
+[2] Total Score: 8
+Post: Checco Zalone vola al botteghino: raggiunti quasi 20 milioni di incassi in tre giorni...
+Reasoning: The post highlights a film's commercial success (20 million in 3 days), strongly emphasizing achievement (5) through box office performance. There is a subtle implication of power (1) due to the film'...
+Values: {'Reputation': 2, 'Power': 1, 'Wealth': 0, 'Achievement': 5, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[3] Total Score: 9
+Post: La domenica a RadioQuar vuol dire anche Live e oggi dalle 13 potremo ascoltare Afghan Whigs e Arab Strap per due ore di musica dal vivo.
+
+Buon diverti...
+Reasoning: The post explicitly promotes a live music event (Afghan Whigs and Arab Strap) at RadioQuar, emphasizing excitement (stimulation:5) and enjoyment (pleasure:4) through the live experience. The tone is c...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 4, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 5, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[4] Total Score: 9
+Post: 📸 Firenze, inizi del ‘900
+Piazza dell’Unità Italiana: il Gran Albergo Baglioni con la sua facciata in pietra forte domina la scena, mentre l’obelisco ...
+Reasoning: The post strongly emphasizes tradition (5) through its focus on historical architecture (Gran Albergo Baglioni) and cultural heritage (Piazza dell'Unità Italiana). The description of the obelisco and ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 1, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 1, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 5, 'Lawfulness': 0, 'Respect': 2, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[5] Total Score: 11
+Post: Ahahah  tipo Checco Zalone al ristorante italiano in Norvegia 🤣🤣🤣🤣🤣🤣...
+Reasoning: The post is a humorous, lighthearted meme-style reaction to a cultural mismatch ('Checco Zalone' as an Italian stereotype in Norway), emphasizing extreme stimulation (6) from the absurdity and comedic...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 5, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 6, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[6] Total Score: 11
+Post: Stanno arrivando le prime selezioni per RadioAperta del 30 giugno.
+Invia anche tu, in dm o via mail, la selezione di sessanta minuti dei tuoi ascolti ...
+Reasoning: The post promotes a creative, participatory activity (RadioAperta) centered around sharing personal music selections, emphasizing excitement (stimulation: 5) and enjoyment (pleasure: 4). The implicit ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 4, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 5, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 2, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[7] Total Score: 11
+Post: Ai vari Barbero,
+Travaglio,  Salvini,Conte , Di Battista, Orsini e
+ tutta la loro marmaglia di sostenitori auguro notti tormentate dalle anime di ques...
+Reasoning: The post expresses strong hostility and desire for retribution against political figures, emphasizing power (6) through the implication of coercive control (e.g., drones as a weaponized threat) and st...
+Values: {'Reputation': 0, 'Power': 6, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 5, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[8] Total Score: 11
+Post: Per aggiungere un tassello alla comprensione dei cani e della loro percezione delle nostre emozioni, un gruppo di ricerca ha osservato le reazioni dei...
+Reasoning: The post discusses scientific research on dogs' ability to perceive human emotions, emphasizing the bond between humans and dogs (caring, 5). There's a moderate sense of responsibility (3) implied in ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 1, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 3, 'Caring': 5, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[9] Total Score: 13
+Post: Non sarà l’mvp come ha recentemente proclamato, ma Jayson Tatum merita di sicuro di essere nella conversazione e di stare nella top 5.
+
+Mette la squad...
+Reasoning: The post strongly emphasizes achievement (5) by discussing Jayson Tatum's elite status in the NBA, framing him as a top-tier player worthy of top-5 consideration despite not being the MVP. Stimulation...
+Values: {'Reputation': 2, 'Power': 1, 'Wealth': 0, 'Achievement': 5, 'Pleasure': 2, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 3, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[10] Total Score: 13
+Post: Il segreto dietro l'espresso italiano ha un nome preciso: #Trieste.
+Quella tazzina che molti di noi sorseggiano ogni mattina ha una storia che pochi c...
+Reasoning: The post strongly emphasizes tradition (5) through the historical reference to Trieste's 1719 role in Italian coffee culture. Pleasure (3) is implied by the enjoyment of morning espresso, while subtle...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 3, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 5, 'Lawfulness': 0, 'Respect': 2, 'Humility': 0, 'Responsibility': 0, 'Caring': 1, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+================================================================================
+END OF REPORT
+================================================================================

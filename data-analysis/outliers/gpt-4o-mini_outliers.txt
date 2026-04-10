@@ -1,0 +1,147 @@
+================================================================================
+OUTLIER ANALYSIS FOR: openai/gpt-4o-mini
+================================================================================
+
+Statistics:
+  Total posts: 25
+  Mean total score: 12.72
+  Std deviation: 4.26
+  High outlier threshold: 21.23
+  Low outlier threshold: 4.21
+
+================================================================================
+HIGH OUTLIERS (Top 10 posts by total score)
+================================================================================
+
+[1] Total Score: 28
+Post: Domani a #Brescia si terrà l'incontro "Prevenire e contrastare il discorso d'odio", con un focus sul termine tristemente attuale "remigrazione".
+
+L'in...
+Reasoning: Strong emphasis on tolerance (6) and respect (5) through addressing hate speech. Responsibility (4) is highlighted by participation in the initiative, while societal security (5) and equality (5) are ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 5, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 5, 'Humility': 0, 'Responsibility': 4, 'Caring': 3, 'Equality': 5, 'Nature': 0, 'Tolerance': 6}
+
+[2] Total Score: 19
+Post: La transizione energetica è una delle sfide più grandi del nostro tempo, e il nucleare pulito si sta affermando come una soluzione promettente per gar...
+Reasoning: The post emphasizes the importance of clean nuclear energy as a promising solution for sustainable energy, highlighting strong independent thought (5) and nature values (6) due to its focus on environ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 5, 'Ind. Actions': 0, 'Stimulation': 3, 'Personal Sec': 0, 'Societal Sec': 5, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 6, 'Tolerance': 0}
+
+[3] Total Score: 17
+Post: Buon pomeriggio anime lievi.
+
+Prima fase di quando si inizia un percorso di crescita personale e fisica, aggiungerei, la motivazione è altissima, la s...
+Reasoning: Moderate achievement (4) from personal growth efforts and stimulation (4) from starting a new journey. Pleasure (3) is present in the excitement of the process, while independent action (3) reflects p...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 4, 'Pleasure': 3, 'Ind. Thoughts': 2, 'Ind. Actions': 3, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 1, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[4] Total Score: 16
+Post: Stanno arrivando le prime selezioni per RadioAperta del 30 giugno.
+Invia anche tu, in dm o via mail, la selezione di sessanta minuti dei tuoi ascolti ...
+Reasoning: Moderate achievement (3) and independent action (4) in participating in the selection process for the radio show. Strong pleasure (4) conveyed through the invitation to have fun, with moderate stimula...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 3, 'Pleasure': 4, 'Ind. Thoughts': 0, 'Ind. Actions': 4, 'Stimulation': 3, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 2, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[5] Total Score: 15
+Post: Trump taglia 175 milioni all’università della Pennsylvania: “Ha fatto gareggiare atleta transgender”...
+Reasoning: The post reflects strong power (5) as it discusses a significant decision by Trump impacting funding, and moderate societal security (4) due to the political implications. Reputation (3) is present as...
+Values: {'Reputation': 3, 'Power': 5, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 4, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 2, 'Nature': 0, 'Tolerance': 1}
+
+[6] Total Score: 15
+Post: Un lungo viaggio chiamato #domesticazione. Ne ho scritto su Il Tascabile👇
+
+#evoluzione #animali #scienza
+
+www.iltascabile.com/scienze/linv......
+Reasoning: Strong independent thought (5) and moderate achievement (3) expressed through writing about domestication and evolution. Stimulation (4) is reflected in the theme of change and exploration. Nature (3)...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 3, 'Pleasure': 0, 'Ind. Thoughts': 5, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 3, 'Tolerance': 0}
+
+[7] Total Score: 14
+Post: Checco Zalone vola al botteghino: raggiunti quasi 20 milioni di incassi in tre giorni...
+Reasoning: The post highlights significant box office success (wealth 5) and notable achievement (4) for the film. Moderate pleasure (3) can be inferred from the excitement of the financial success. Stimulation ...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 5, 'Achievement': 4, 'Pleasure': 3, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[8] Total Score: 14
+Post: Negata sala convegni al comitato di estrema destra 'Remigrazione'...
+Reasoning: The post highlights the denial of a venue for a far-right committee, suggesting strong implications for societal security (4) and equality (5) in terms of protecting against extremist views. There's a...
+Values: {'Reputation': 2, 'Power': 1, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 4, 'Tradition': 0, 'Lawfulness': 2, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 5, 'Nature': 0, 'Tolerance': 0}
+
+[9] Total Score: 13
+Post: Ai vari Barbero,
+Travaglio,  Salvini,Conte , Di Battista, Orsini e
+ tutta la loro marmaglia di sostenitori auguro notti tormentate dalle anime di ques...
+Reasoning: Strong societal security (6) concern for the safety of victims and a strong expression of power (5) against political figures. There's moderate responsibility (2) implied in wishing repercussions for ...
+Values: {'Reputation': 0, 'Power': 5, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 6, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 2, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[10] Total Score: 13
+Post: Muore Robert Mueller, uomo integerrimo, un uomo di un’America che purtroppo quasi non c’è più, e il presidente americano Trump commenta: “Sono content...
+Reasoning: Strong emphasis on societal security (6) reflecting concerns about the state of American civilization under Trump's leadership. Independent thought (5) is evident in the critique of current events. Mo...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 5, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 6, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 2, 'Nature': 0, 'Tolerance': 0}
+
+================================================================================
+LOW OUTLIERS (Bottom 10 posts by total score)
+================================================================================
+
+[1] Total Score: 6
+Post: Tutti i cittadini hanno pari dignità sociale e sono eguali davanti alla legge, senza distinzioni di #sesso, di #razza, di #lingua, di #religione, di #...
+Reasoning: The post strongly emphasizes equality (6) by asserting that all citizens have equal social dignity and are equal before the law, without any distinctions....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 6, 'Nature': 0, 'Tolerance': 0}
+
+[2] Total Score: 7
+Post: Il segreto dietro l'espresso italiano ha un nome preciso: #Trieste.
+Quella tazzina che molti di noi sorseggiano ogni mattina ha una storia che pochi c...
+Reasoning: Strong emphasis on tradition (5) as the post highlights the historical significance of coffee culture in Trieste. Moderate stimulation (2) is present due to the intriguing narrative about the espresso...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 2, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 5, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[3] Total Score: 9
+Post: La domenica a RadioQuar vuol dire anche Live e oggi dalle 13 potremo ascoltare Afghan Whigs e Arab Strap per due ore di musica dal vivo.
+
+Buon diverti...
+Reasoning: The post expresses strong pleasure (5) and moderate stimulation (4) through the excitement of live music and entertainment on a Sunday, with a lighthearted tone....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 5, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[4] Total Score: 9
+Post: 📸 Firenze, inizi del ‘900
+Piazza dell’Unità Italiana: il Gran Albergo Baglioni con la sua facciata in pietra forte domina la scena, mentre l’obelisco ...
+Reasoning: Strong emphasis on tradition (5) through the historical context of Florence and its architecture. Moderate stimulation (4) from the depiction of a city blending tradition and modernity....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 5, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[5] Total Score: 10
+Post: Ahahah  tipo Checco Zalone al ristorante italiano in Norvegia 🤣🤣🤣🤣🤣🤣...
+Reasoning: The post expresses strong pleasure (6) through humor and enjoyment of a comedic reference, with moderate stimulation (4) from the lively tone and laughter....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 6, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[6] Total Score: 10
+Post: Non sarà l’mvp come ha recentemente proclamato, ma Jayson Tatum merita di sicuro di essere nella conversazione e di stare nella top 5.
+
+Mette la squad...
+Reasoning: Strong emphasis on achievement (5) as Jayson Tatum is recognized for his performance and contribution to the team. Reputation (4) is reflected in the discussion of his standing in the NBA and being pa...
+Values: {'Reputation': 4, 'Power': 0, 'Wealth': 0, 'Achievement': 5, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 1, 'Responsibility': 0, 'Caring': 0, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[7] Total Score: 11
+Post: La domenica a RadioQuar vuol dire anche Live e oggi dalle 13 potremo ascoltare Afghan Whigs e Arab Strap per due ore di musica dal vivo.
+
+Buon diverti...
+Reasoning: Strong pleasure (5) from the enjoyment of live music and a social event on a Sunday. Moderate stimulation (4) from the excitement of listening to live performances. Some caring (2) is implied in the i...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 5, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 2, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[8] Total Score: 11
+Post: Alle 16 si balla con Magic Window, il segmento musicale a cura di @totore.bsky.social  , con un piccolo omaggio ai Faithless
+
+Buon divertimento!
+news....
+Reasoning: Strong expression of pleasure (5) and stimulation (4) related to enjoyment of music and dancing. Moderate caring (2) implied through the invitation to join the fun....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 5, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 2, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+[9] Total Score: 11
+Post: Tutti i cittadini hanno pari dignità sociale e sono eguali davanti alla legge, senza distinzioni di #sesso, di #razza, di #lingua, di #religione, di #...
+Reasoning: The post strongly emphasizes equality (6) by asserting the equal dignity of all citizens regardless of various distinctions, and it also reflects a strong commitment to societal security (5) by advoca...
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 0, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 0, 'Personal Sec': 0, 'Societal Sec': 5, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 0, 'Equality': 6, 'Nature': 0, 'Tolerance': 0}
+
+[10] Total Score: 11
+Post: Alle 16 si balla con Magic Window, il segmento musicale a cura di @totore.bsky.social  , con un piccolo omaggio ai Faithless
+
+Buon divertimento!
+news....
+Reasoning: The post expresses strong pleasure (5) and stimulation (4) through the excitement of a music segment. Moderate caring (2) is implied by the invitation to enjoy the event....
+Values: {'Reputation': 0, 'Power': 0, 'Wealth': 0, 'Achievement': 0, 'Pleasure': 5, 'Ind. Thoughts': 0, 'Ind. Actions': 0, 'Stimulation': 4, 'Personal Sec': 0, 'Societal Sec': 0, 'Tradition': 0, 'Lawfulness': 0, 'Respect': 0, 'Humility': 0, 'Responsibility': 0, 'Caring': 2, 'Equality': 0, 'Nature': 0, 'Tolerance': 0}
+
+================================================================================
+END OF REPORT
+================================================================================

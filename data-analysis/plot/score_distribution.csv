@@ -1,0 +1,58 @@
+Model,Value,% Zeros,% Mid (1-3),% High (4-6)
+GPT-4o-mini,Reputation,0.0,0.0,0.0
+GPT-4o-mini,Power,0.0,0.0,0.0
+GPT-4o-mini,Wealth,0.0,0.0,0.0
+GPT-4o-mini,Achievement,0.0,0.0,0.0
+GPT-4o-mini,Pleasure,0.0,0.0,0.0
+GPT-4o-mini,Independent thoughts,0.0,0.0,0.0
+GPT-4o-mini,Independent actions,0.0,0.0,0.0
+GPT-4o-mini,Stimulation,0.0,0.0,0.0
+GPT-4o-mini,Personal security,0.0,0.0,0.0
+GPT-4o-mini,Societal security,0.0,0.0,0.0
+GPT-4o-mini,Tradition,0.0,0.0,0.0
+GPT-4o-mini,Lawfulness,0.0,0.0,0.0
+GPT-4o-mini,Respect,0.0,0.0,0.0
+GPT-4o-mini,Humility,0.0,0.0,0.0
+GPT-4o-mini,Responsibility,0.0,0.0,0.0
+GPT-4o-mini,Caring,0.0,0.0,0.0
+GPT-4o-mini,Equality,0.0,0.0,0.0
+GPT-4o-mini,Nature,0.0,0.0,0.0
+GPT-4o-mini,Tolerance,0.0,0.0,0.0
+Ministral-14b,Reputation,32.4,47.2,20.4
+Ministral-14b,Power,45.8,30.8,23.4
+Ministral-14b,Wealth,89.6,5.7,4.7
+Ministral-14b,Achievement,48.8,34.8,16.4
+Ministral-14b,Pleasure,67.6,26.1,6.4
+Ministral-14b,Independent thoughts,48.5,26.8,24.7
+Ministral-14b,Independent actions,42.8,43.1,14.0
+Ministral-14b,Stimulation,5.7,70.9,23.4
+Ministral-14b,Personal security,83.6,7.4,9.0
+Ministral-14b,Societal security,50.5,11.7,37.8
+Ministral-14b,Tradition,79.9,9.4,10.7
+Ministral-14b,Lawfulness,66.6,8.4,25.1
+Ministral-14b,Respect,69.9,14.4,15.7
+Ministral-14b,Humility,93.0,4.0,3.0
+Ministral-14b,Responsibility,37.8,22.4,39.8
+Ministral-14b,Caring,53.5,14.7,31.8
+Ministral-14b,Equality,67.6,6.7,25.8
+Ministral-14b,Nature,90.0,1.7,8.4
+Ministral-14b,Tolerance,59.2,25.8,15.1
+Qwen-3,Reputation,0.0,0.0,0.0
+Qwen-3,Power,0.0,0.0,0.0
+Qwen-3,Wealth,0.0,0.0,0.0
+Qwen-3,Achievement,0.0,0.0,0.0
+Qwen-3,Pleasure,0.0,0.0,0.0
+Qwen-3,Independent thoughts,0.0,0.0,0.0
+Qwen-3,Independent actions,0.0,0.0,0.0
+Qwen-3,Stimulation,0.0,0.0,0.0
+Qwen-3,Personal security,0.0,0.0,0.0
+Qwen-3,Societal security,0.0,0.0,0.0
+Qwen-3,Tradition,0.0,0.0,0.0
+Qwen-3,Lawfulness,0.0,0.0,0.0
+Qwen-3,Respect,0.0,0.0,0.0
+Qwen-3,Humility,0.0,0.0,0.0
+Qwen-3,Responsibility,0.0,0.0,0.0
+Qwen-3,Caring,0.0,0.0,0.0
+Qwen-3,Equality,0.0,0.0,0.0
+Qwen-3,Nature,0.0,0.0,0.0
+Qwen-3,Tolerance,0.0,0.0,0.0
