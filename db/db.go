@@ -363,6 +363,46 @@ func GetPostsNeedingAnalysis(model string, maxAnalyses int) ([]schwartz.Post, er
 	return posts, nil
 }
 
+func GetRandomPosts(model string, maxAnalyses int, limit int) ([]schwartz.Post, error) {
+	query := `
+		SELECT p.at_uri, p.url, p.text, p.created_at, p.langs, p.tags, p.images, p.links, p.facets, p.author_name, p.reply_root, p.reply_parent, p.likes, p.replies, p.reposts, p.quotes
+		FROM posts p
+		LEFT JOIN analyses a ON a.post_at_uri = p.at_uri AND a.model = ?
+		GROUP BY p.at_uri
+		HAVING COUNT(a.id) < ?
+		ORDER BY RANDOM()
+		LIMIT ?
+	`
+	rows, err := DB.Query(query, model, maxAnalyses, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []schwartz.Post
+	for rows.Next() {
+		var post schwartz.Post
+		var langsJSON, tagsJSON, imagesJSON, linksJSON, facetsJSON string
+		var likes, replies, reposts, quotes int
+		err := rows.Scan(&post.AtURI, &post.URL, &post.Text, &post.CreatedAt, &langsJSON, &tagsJSON, &imagesJSON, &linksJSON, &facetsJSON, &post.AuthorName, &post.ReplyRoot, &post.ReplyParent, &likes, &replies, &reposts, &quotes)
+		if err != nil {
+			return nil, err
+		}
+		post.LikeCount = likes
+		post.ReplyCount = replies
+		post.RepostCount = reposts
+		post.QuoteCount = quotes
+		json.Unmarshal([]byte(langsJSON), &post.Langs)
+		json.Unmarshal([]byte(tagsJSON), &post.Tags)
+		json.Unmarshal([]byte(imagesJSON), &post.Images)
+		json.Unmarshal([]byte(linksJSON), &post.Links)
+		json.Unmarshal([]byte(facetsJSON), &post.Facets)
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
 func GetAllPosts() ([]schwartz.Post, error) {
 	query := `
 		SELECT p.at_uri, p.url, p.text, p.created_at, p.langs, p.tags, p.images, p.links, p.facets, p.author_name, p.reply_root, p.reply_parent, p.likes, p.replies, p.reposts, p.quotes

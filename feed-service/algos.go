@@ -39,7 +39,8 @@ func GetFeedPosts(includeUnanalyzed bool) ([]schwartz.Post, error) {
 		return dbpkg.GetAllPosts()
 	}
 	// TODO: Let the user select it from the webapp
-	model := "ministral"
+	// model := "ministral"
+	model := "mistralai/ministral-14b-2512"
 	fmt.Println("Using model:", model)
 	return dbpkg.GetPostsWithAnalysisAveraged(model)
 }
