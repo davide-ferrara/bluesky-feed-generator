@@ -42,6 +42,10 @@ Return a JSON object with exactly TWO fields:
 
 CRITICAL: "Reasoning" MUST be a single string value, NOT an object. Do NOT include per-value reasoning fields.
 
+IMPORTANT: Use EXACTLY these JSON keys (note the 's' at the end):
+- "independent_thoughts" (NOT "independent_thought")
+- "independent_actions" (NOT "independent_action")
+
 Example format:
 {"Rating": {"reputation": 0, "power": 2, "wealth": 1, "achievement": 0, "pleasure": 0, "independent_thoughts": 0, "independent_actions": 0, "stimulation": 3, "personal_security": 0, "societal_security": 0, "tradition": 0, "lawfulness": 0, "respect": 0, "humility": 0, "responsibility": 5, "caring": 4, "equality": 5, "nature": 0, "tolerance": 3}, "Reasoning": "This is a single string explaining the overall reasoning."}
 

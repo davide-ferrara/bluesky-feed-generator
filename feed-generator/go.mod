@@ -9,6 +9,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/openai/openai-go/v3 v3.30.0
 	github.com/revrost/go-openrouter v1.1.7
+	golang.org/x/time v0.15.0
 )
 
 replace bsky-schwartz/db => ../db

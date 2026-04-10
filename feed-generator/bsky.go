@@ -230,6 +230,198 @@ func (c *Client) GetAtURI(ctx context.Context, handle string, key string) (strin
 	return atURI, nil
 }
 
+// GetFeed retrieves posts from a custom feed generator
+func (c *Client) GetFeed(ctx context.Context, handle, feedName string, limit int, cursor string) ([]schwartz.Post, string, error) {
+	// Use PDS endpoint for feed requests (bsky.social instead of api.bsky.app)
+	pdsClient := &xrpc.Client{
+		Host: "https://bsky.social",
+		Auth: c.client.Auth,
+	}
+
+	result, err := atproto.IdentityResolveHandle(ctx, pdsClient, handle)
+	if err != nil {
+		return nil, "", fmt.Errorf("resolve handle: %w", err)
+	}
+
+	feedURI := fmt.Sprintf("at://%s/app.bsky.feed.generator/%s", result.Did, feedName)
+
+	feed, err := bsky.FeedGetFeed(ctx, pdsClient, cursor, feedURI, int64(limit))
+	if err != nil {
+		return nil, "", fmt.Errorf("get feed: %w", err)
+	}
+
+	posts := []schwartz.Post{}
+	for _, item := range feed.Feed {
+		postView := item.Post
+		if postView == nil {
+			continue
+		}
+
+		record, ok := postView.Record.Val.(*bsky.FeedPost)
+		if !ok {
+			continue
+		}
+
+		var labels []string
+		for _, label := range postView.Labels {
+			labels = append(labels, label.Val)
+		}
+
+		authorName := string(postView.Author.Handle)
+		if postView.Author.DisplayName != nil && *postView.Author.DisplayName != "" {
+			authorName = *postView.Author.DisplayName
+		}
+
+		split := strings.Split(postView.Uri, "/")
+		key := split[len(split)-1]
+
+		var replyRoot, replyParent string
+		if record.Reply != nil {
+			replyRoot = record.Reply.Root.Uri
+			replyParent = record.Reply.Parent.Uri
+		}
+
+		likeCount := 0
+		if postView.LikeCount != nil {
+			likeCount = int(*postView.LikeCount)
+		}
+		replyCount := 0
+		if postView.ReplyCount != nil {
+			replyCount = int(*postView.ReplyCount)
+		}
+		repostCount := 0
+		if postView.RepostCount != nil {
+			repostCount = int(*postView.RepostCount)
+		}
+		quoteCount := 0
+		if postView.QuoteCount != nil {
+			quoteCount = int(*postView.QuoteCount)
+		}
+
+		postURL := fmt.Sprintf("https://bsky.app/profile/%s/post/%s", postView.Author.Handle, key)
+		atURI := fmt.Sprintf("at://%s/app.bsky.feed.post/%s", postView.Author.Did, key)
+
+		posts = append(posts, schwartz.Post{
+			URL:         postURL,
+			AtURI:       atURI,
+			Text:        record.Text,
+			CreatedAt:   record.CreatedAt,
+			Labels:      labels,
+			Langs:       record.Langs,
+			Tags:        record.Tags,
+			Images:      extractImagesView(postView),
+			Links:       extractLinksView(postView),
+			Facets:      extractFacets(record),
+			AuthorName:  authorName,
+			ReplyRoot:   replyRoot,
+			ReplyParent: replyParent,
+			LikeCount:   likeCount,
+			ReplyCount:  replyCount,
+			RepostCount: repostCount,
+			QuoteCount:  quoteCount,
+		})
+	}
+
+	nextCursor := ""
+	if feed.Cursor != nil {
+		nextCursor = *feed.Cursor
+	}
+
+	return posts, nextCursor, nil
+}
+
+// GetAuthorPosts retrieves posts from a specific profile/author
+func (c *Client) GetAuthorPosts(ctx context.Context, handle string, limit int, cursor string) ([]schwartz.Post, string, error) {
+	pdsClient := &xrpc.Client{
+		Host: "https://bsky.social",
+		Auth: c.client.Auth,
+	}
+
+	result, err := bsky.FeedGetAuthorFeed(ctx, pdsClient, handle, cursor, "posts_with_replies", false, int64(limit))
+	if err != nil {
+		return nil, "", fmt.Errorf("get author feed: %w", err)
+	}
+
+	posts := []schwartz.Post{}
+	for _, item := range result.Feed {
+		postView := item.Post
+		if postView == nil {
+			continue
+		}
+
+		record, ok := postView.Record.Val.(*bsky.FeedPost)
+		if !ok {
+			continue
+		}
+
+		var labels []string
+		for _, label := range postView.Labels {
+			labels = append(labels, label.Val)
+		}
+
+		authorName := string(postView.Author.Handle)
+		if postView.Author.DisplayName != nil && *postView.Author.DisplayName != "" {
+			authorName = *postView.Author.DisplayName
+		}
+
+		split := strings.Split(postView.Uri, "/")
+		key := split[len(split)-1]
+
+		var replyRoot, replyParent string
+		if record.Reply != nil {
+			replyRoot = record.Reply.Root.Uri
+			replyParent = record.Reply.Parent.Uri
+		}
+
+		likeCount := 0
+		if postView.LikeCount != nil {
+			likeCount = int(*postView.LikeCount)
+		}
+		replyCount := 0
+		if postView.ReplyCount != nil {
+			replyCount = int(*postView.ReplyCount)
+		}
+		repostCount := 0
+		if postView.RepostCount != nil {
+			repostCount = int(*postView.RepostCount)
+		}
+		quoteCount := 0
+		if postView.QuoteCount != nil {
+			quoteCount = int(*postView.QuoteCount)
+		}
+
+		postURL := fmt.Sprintf("https://bsky.app/profile/%s/post/%s", postView.Author.Handle, key)
+		atURI := fmt.Sprintf("at://%s/app.bsky.feed.post/%s", postView.Author.Did, key)
+
+		posts = append(posts, schwartz.Post{
+			URL:         postURL,
+			AtURI:       atURI,
+			Text:        record.Text,
+			CreatedAt:   record.CreatedAt,
+			Labels:      labels,
+			Langs:       record.Langs,
+			Tags:        record.Tags,
+			Images:      extractImagesView(postView),
+			Links:       extractLinksView(postView),
+			Facets:      extractFacets(record),
+			AuthorName:  authorName,
+			ReplyRoot:   replyRoot,
+			ReplyParent: replyParent,
+			LikeCount:   likeCount,
+			ReplyCount:  replyCount,
+			RepostCount: repostCount,
+			QuoteCount:  quoteCount,
+		})
+	}
+
+	nextCursor := ""
+	if result.Cursor != nil {
+		nextCursor = *result.Cursor
+	}
+
+	return posts, nextCursor, nil
+}
+
 func extractImagesView(postView *bsky.FeedDefs_PostView) []schwartz.PostImage {
 	var images []schwartz.PostImage
 	if postView.Embed == nil || postView.Embed.EmbedImages_View == nil {

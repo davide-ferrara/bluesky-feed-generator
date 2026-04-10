@@ -114,10 +114,15 @@ func BuildPromptContent(post *schwartz.Post, analyzeImages bool) string {
 	return fmt.Sprintf("<post>\n%s\n</post>", jsonBytes)
 }
 
-func CalculateRating(ctx context.Context, client AIClient, model string, post *schwartz.Post, analyzeImages bool) (*schwartz.ValueAnalysis, error) {
-	start := time.Now()
+func CalculateRating(ctx context.Context, client AIClient, model string, post *schwartz.Post, analyzeImages bool, promptVersion string) (*schwartz.ValueAnalysis, error) {
+	start := time.Time{}
 
-	taskPrompt, err := os.ReadFile("./prompts/PROMPT_V3.md")
+	promptFile := "./prompts/PROMPT_V3.md"
+	if promptVersion == "v4" {
+		promptFile = "./prompts/PROMPT_V4.md"
+	}
+
+	taskPrompt, err := os.ReadFile(promptFile)
 	if err != nil {
 		return nil, fmt.Errorf("reading prompt: %w", err)
 	}

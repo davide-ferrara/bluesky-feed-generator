@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"bsky-schwartz/db"
@@ -24,7 +25,9 @@ func AnalyzePosts(modelFilter string) {
 	}
 	defer closeLogging()
 
-	maxAnalysesPerModel := 5
+	fmt.Printf("Using prompt version: %s\n", *promptVersion)
+
+	maxAnalysesPerModel := 1
 
 	filteredConfigs := modelConfigs
 	if modelFilter != "" {
@@ -41,7 +44,14 @@ func AnalyzePosts(modelFilter string) {
 			fmt.Println()
 			return
 		}
-		fmt.Printf("Filtering models by: %s\n", modelFilter)
+		fmt.Printf("Filtered to %d model(s): ", len(filteredConfigs))
+		for i, cfg := range filteredConfigs {
+			if i > 0 {
+				fmt.Print(", ")
+			}
+			fmt.Print(cfg.Name)
+		}
+		fmt.Println()
 	}
 
 	// Get posts needing analysis for the first model in the filtered list
@@ -50,7 +60,16 @@ func AnalyzePosts(modelFilter string) {
 		modelName = filteredConfigs[0].ModelID
 	}
 
-	posts, err := db.GetPostsNeedingAnalysis(modelName, maxAnalysesPerModel)
+	var posts []schwartz.Post
+	var err error
+
+	if *sampleFlag > 0 {
+		fmt.Printf("Getting random sample of %d posts...\n", *sampleFlag)
+		posts, err = db.GetRandomPosts(modelName, maxAnalysesPerModel, *sampleFlag)
+	} else {
+		posts, err = db.GetPostsNeedingAnalysis(modelName, maxAnalysesPerModel)
+	}
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: could not get posts: %v\n", err)
 		os.Exit(1)
@@ -80,6 +99,7 @@ func AnalyzePosts(modelFilter string) {
 			continue
 		}
 
+		// Post To Analayze
 		var postsToAnalyze []schwartz.Post
 		var skippedPosts []string
 		for _, post := range posts {
@@ -90,18 +110,16 @@ func AnalyzePosts(modelFilter string) {
 				postsToAnalyze = append(postsToAnalyze, post)
 			}
 		}
-
 		if len(skippedPosts) > 0 {
 			fmt.Printf("Skipped %d posts already having %d analyses for this model\n", len(skippedPosts), maxAnalysesPerModel)
 		}
-
 		if len(postsToAnalyze) == 0 {
 			fmt.Println("No posts to analyze for this model!")
 			continue
 		}
-
 		fmt.Printf("Analyzing %d posts for this model\n", len(postsToAnalyze))
 
+		// Get the AI Client
 		var client AIClient
 		switch cfg.Provider {
 		case "openrouter":
@@ -112,23 +130,69 @@ func AnalyzePosts(modelFilter string) {
 			fmt.Printf("ERROR: Unknown provider: %s\n", cfg.Provider)
 			continue
 		}
-
 		if err != nil {
 			fmt.Printf("ERROR: Failed to init client: %v\n", err)
 			continue
 		}
 
-		if err := runAnalysisForModel(client, postsToAnalyze, cfg.ModelID, cfg.Provider, *analyzeImages); err != nil {
-			fmt.Printf("ERROR: Analysis failed: %v\n", err)
-		}
-	}
+		// Process with Routines
+		var wg sync.WaitGroup
+		workers := 5
 
-	fmt.Println("\n========================================")
-	fmt.Println("All models processed.")
-	fmt.Println("========================================")
+		in := make(chan schwartz.Post, workers)
+
+		for range workers {
+			wg.Add(1)
+			go runAnalysisAsync(&wg, client, in, cfg.ModelID, cfg.Provider, *analyzeImages, *promptVersion)
+		}
+
+		for _, post := range postsToAnalyze {
+			in <- post
+		}
+		close(in)
+
+		wg.Wait()
+
+		fmt.Println("\n========================================")
+		fmt.Println("All models processed.")
+		fmt.Println("========================================")
+	}
 }
 
-func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, provider string, analyzeImages bool) error {
+func runAnalysisAsync(wg *sync.WaitGroup, client AIClient, in <-chan schwartz.Post, model string, provider string, analyzeImages bool, promptVersion string) {
+	defer wg.Done()
+
+	counter := 0
+	for post := range in {
+		counter++
+		postStart := time.Now()
+		fmt.Printf("  [%d] Analyzing: %s\n", counter, truncate(post.Text, 50))
+
+		ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+
+		analysis, err := CalculateRating(ctx, client, model, &post, analyzeImages, promptVersion)
+		if err != nil {
+			fmt.Printf("  ERROR analyzing post: %v\n", err)
+			cancel()
+			continue
+		}
+
+		fmt.Printf("  OK - Tokens: %d - Time: %v\n",
+			analysis.Stats.TotalTokens,
+			time.Since(postStart).Round(time.Millisecond))
+
+		logAnalysis(post.AtURI, model, analysis.Rating, analysis.Reasoning, analysis.Stats)
+
+		if err := db.SaveAnalysis(post.AtURI, model, provider, *analysis); err != nil {
+			fmt.Printf("  ERROR saving analysis: %v\n", err)
+		}
+
+		cancel()
+		time.Sleep(3 * time.Second)
+	}
+}
+
+func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, provider string, analyzeImages bool, promptVersion string) error {
 	startTime := time.Now()
 
 	for i := range posts {
@@ -137,7 +201,7 @@ func runAnalysisForModel(client AIClient, posts []schwartz.Post, model string, p
 
 		ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 
-		analysis, err := CalculateRating(ctx, client, model, &posts[i], analyzeImages)
+		analysis, err := CalculateRating(ctx, client, model, &posts[i], analyzeImages, promptVersion)
 		if err != nil {
 			posts[i].ValueAnalysis.Error = err.Error()
 			fmt.Printf("  [Post %d/%d] ERROR: %v\n", i+1, len(posts), err)
@@ -174,9 +238,13 @@ func filterModels(configs []ModelConfig, name string) []ModelConfig {
 	name = strings.ToLower(name)
 	var filtered []ModelConfig
 	for _, cfg := range configs {
-		if strings.Contains(strings.ToLower(cfg.Name), name) {
+		if strings.Contains(strings.ToLower(cfg.Name), name) || strings.Contains(strings.ToLower(cfg.ModelID), name) {
 			filtered = append(filtered, cfg)
 		}
+	}
+	if len(filtered) > 1 {
+		fmt.Printf("Multiple models match '%s', using first: %s\n", name, filtered[0].Name)
+		return filtered[:1]
 	}
 	return filtered
 }

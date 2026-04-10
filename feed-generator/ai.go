@@ -16,11 +16,15 @@ func NewOpenRouterClient(apiKey string) *OpenRouterClient {
 }
 
 func (c *OpenRouterClient) CreateChatCompletion(ctx context.Context, model string, prompt string) (*AIResponse, error) {
+	// Use higher temperature (0.7) for better range utilization on smaller models
+	// This helps avoid conservative all-zero responses
+	temperature := float32(0.7)
+
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openrouter.ChatCompletionRequest{
 			Model:       model,
-			Temperature: 0.3,
+			Temperature: temperature,
 			Messages: []openrouter.ChatCompletionMessage{
 				openrouter.UserMessage(prompt),
 			},
@@ -54,11 +58,15 @@ func NewOpenAIClient(apiKey string, baseURL string) *OpenAIClient {
 }
 
 func (c *OpenAIClient) CreateChatCompletion(ctx context.Context, model string, prompt string) (*AIResponse, error) {
+	// Use higher temperature (0.7) for better range utilization on smaller models
+	temperature := float64(0.7)
+
 	resp, err := c.client.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
 		Model: model,
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage(prompt),
 		},
+		Temperature: openai.Float(temperature),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("openai error: %w", err)

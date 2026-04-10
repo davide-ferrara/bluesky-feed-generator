@@ -13,8 +13,10 @@ var (
 	limitFlag     = flag.Int("limit", 0, "Number of posts to analyze per model")
 	modelFlag     = flag.String("model", "", "Run analysis for specific model (partial name match)")
 	limitAnalyze  = flag.Int("l", 0, "Limit posts to analyze")
+	sampleFlag    = flag.Int("sample", 0, "Analyze random sample of N posts instead of sequential")
 	langFlag      = flag.String("lang", "it", "Language filter for posts (e.g., it, en)")
 	analyzeImages = flag.Bool("images", true, "Include images in AI analysis")
+	promptVersion = flag.String("prompt", "v4", "Prompt version to use (v3 or v4, default: v4)")
 )
 
 func GetEnv(key string) string {
@@ -51,8 +53,16 @@ func main() {
 		FetchFromFile(flag.Arg(1))
 		os.Exit(0)
 
+	case "collect-feeds":
+		CollectFromFeeds()
+		os.Exit(0)
+
+	case "collect-profiles":
+		CollectFromProfiles()
+		os.Exit(0)
+
 	default:
 		fmt.Printf("Unknown command: %s\n", flag.Arg(0))
-		os.Exit(0)
+		os.Exit(1)
 	}
 }
