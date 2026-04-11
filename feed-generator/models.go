@@ -8,19 +8,16 @@ import (
 	openrouter "github.com/revrost/go-openrouter"
 )
 
+var modelConfigs = []ModelConfig{
+	{Name: "gpt-4o-mini", Provider: "openrouter", ModelID: "openai/gpt-4o-mini"},
+	{Name: "ministral-3-14b", Provider: "openrouter", ModelID: "mistralai/ministral-14b-2512"},
+	{Name: "qwen3-14b", Provider: "siliconflow", ModelID: "Qwen/Qwen3-14B"},
+}
+
 type ModelConfig struct {
 	Name     string
 	Provider string // "openrouter" or "siliconflow"
 	ModelID  string // model ID for the provider
-}
-
-var modelConfigs = []ModelConfig{
-	{Name: "gpt-4o-mini", Provider: "openrouter", ModelID: "openai/gpt-4o-mini"},
-	{Name: "ministral-8b", Provider: "openrouter", ModelID: "mistralai/ministral-8b-2512"},
-	{Name: "ministral-3-14b", Provider: "openrouter", ModelID: "mistralai/ministral-14b-2512"},
-	{Name: "qwen3-vl-8b", Provider: "siliconflow", ModelID: "Qwen/Qwen3-VL-8B-Instruct"},
-	{Name: "gpt-4.1", Provider: "openrouter", ModelID: "openai/gpt-4.1"},
-	{Name: "claude-sonnet-4.6", Provider: "openrouter", ModelID: "anthropic/claude-sonnet-4.6"},
 }
 
 type Client struct {
@@ -28,7 +25,7 @@ type Client struct {
 }
 
 type AIClient interface {
-	CreateChatCompletion(ctx context.Context, model string, prompt string) (*AIResponse, error)
+	CreateChatCompletion(ctx context.Context, model string, content ChatContent) (*AIResponse, error)
 }
 
 type AIResponse struct {

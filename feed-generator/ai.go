@@ -9,27 +9,30 @@ import (
 	openrouter "github.com/revrost/go-openrouter"
 )
 
-func NewOpenRouterClient(apiKey string) *OpenRouterClient {
-	return &OpenRouterClient{
-		client: openrouter.NewClient(apiKey),
-	}
+type ChatContent struct {
+	Text   string
+	Images []string
 }
 
-func (c *OpenRouterClient) CreateChatCompletion(ctx context.Context, model string, prompt string) (*AIResponse, error) {
-	// Use higher temperature (0.7) for better range utilization on smaller models
-	// This helps avoid conservative all-zero responses
+func NewOpenRouterClient(apiKey string) *OpenRouterClient {
+	return &OpenRouterClient{client: openrouter.NewClient(apiKey)}
+}
+
+func (c *OpenRouterClient) CreateChatCompletion(ctx context.Context, model string, content ChatContent) (*AIResponse, error) {
 	temperature := float32(0.7)
 
-	resp, err := c.client.CreateChatCompletion(
-		ctx,
-		openrouter.ChatCompletionRequest{
-			Model:       model,
-			Temperature: temperature,
-			Messages: []openrouter.ChatCompletionMessage{
-				openrouter.UserMessage(prompt),
-			},
-		},
-	)
+	var msg openrouter.ChatCompletionMessage
+	if len(content.Images) > 0 {
+		msg = openrouter.UserMessageWithImage(content.Text, content.Images[0])
+	} else {
+		msg = openrouter.UserMessage(content.Text)
+	}
+
+	resp, err := c.client.CreateChatCompletion(ctx, openrouter.ChatCompletionRequest{
+		Model:       model,
+		Temperature: temperature,
+		Messages:    []openrouter.ChatCompletionMessage{msg},
+	})
 	if err != nil {
 		return nil, fmt.Errorf("openrouter error: %w", err)
 	}
@@ -46,26 +49,26 @@ func (c *OpenRouterClient) CreateChatCompletion(ctx context.Context, model strin
 }
 
 func NewOpenAIClient(apiKey string, baseURL string) *OpenAIClient {
-	opts := []option.RequestOption{
+	client := openai.NewClient(
 		option.WithAPIKey(apiKey),
-	}
-	if baseURL != "" {
-		opts = append(opts, option.WithBaseURL(baseURL))
-	}
-
-	client := openai.NewClient(opts...)
+		option.WithBaseURL(baseURL),
+	)
 	return &OpenAIClient{client: &client}
 }
 
-func (c *OpenAIClient) CreateChatCompletion(ctx context.Context, model string, prompt string) (*AIResponse, error) {
-	// Use higher temperature (0.7) for better range utilization on smaller models
+func (c *OpenAIClient) CreateChatCompletion(ctx context.Context, model string, content ChatContent) (*AIResponse, error) {
 	temperature := float64(0.7)
 
+	var msg openai.ChatCompletionMessageParamUnion
+	if len(content.Images) > 0 {
+		msg = openai.UserMessage(content.Text)
+	} else {
+		msg = openai.UserMessage(content.Text)
+	}
+
 	resp, err := c.client.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
-		Model: model,
-		Messages: []openai.ChatCompletionMessageParamUnion{
-			openai.UserMessage(prompt),
-		},
+		Model:       model,
+		Messages:    []openai.ChatCompletionMessageParamUnion{msg},
 		Temperature: openai.Float(temperature),
 	})
 	if err != nil {

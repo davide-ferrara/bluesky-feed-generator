@@ -9,20 +9,20 @@ import (
 )
 
 var (
-	collectLimit  = flag.Int("n", 40, "Total posts to collect for feed (balanced across 4 clusters)")
-	limitFlag     = flag.Int("limit", 0, "Number of posts to analyze per model")
-	modelFlag     = flag.String("model", "", "Run analysis for specific model (partial name match)")
-	limitAnalyze  = flag.Int("l", 0, "Limit posts to analyze")
-	sampleFlag    = flag.Int("sample", 0, "Analyze random sample of N posts instead of sequential")
-	langFlag      = flag.String("lang", "it", "Language filter for posts (e.g., it, en)")
-	analyzeImages = flag.Bool("images", true, "Include images in AI analysis")
-	promptVersion = flag.String("prompt", "v4", "Prompt version to use (v3 or v4, default: v4)")
+	modelFlag     = flag.String("model", "", "Run analysis for specific model")
+	limitAnalyze  = flag.Int("l", 0, "Limit posts")
+	sampleFlag    = flag.Int("sample", 0, "Random sample")
+	promptVersion = flag.String("prompt", "v4", "Prompt version")
+	dbPath        = flag.String("db", "", "DB path")
+	profilesPath  = flag.String("profiles", "", "Profiles path")
+	collectTotal  = flag.Int("total", 0, "Total posts to collect")
 )
 
 func GetEnv(key string) string {
 	v := os.Getenv(key)
 	if v == "" {
-		panic("missing env: " + key)
+		fmt.Fprintf(os.Stderr, "Missing .env file\n")
+		os.Exit(1)
 	}
 	return v
 }
@@ -34,16 +34,17 @@ func main() {
 
 	flag.Parse()
 
-	switch flag.Arg(0) {
+	if *dbPath != "" {
+		DBPath = *dbPath
+	}
+	if *profilesPath != "" {
+		ProfilesFile = *profilesPath
+	}
 
-	case "":
-		postsPerCluster := *collectLimit / 4
-		GenerateFeed(postsPerCluster, *langFlag)
-		os.Exit(0)
+	switch flag.Arg(0) {
 
 	case "analyze":
 		AnalyzePosts(*modelFlag)
-		os.Exit(0)
 
 	case "from-file":
 		if flag.NArg() < 2 {
@@ -51,15 +52,9 @@ func main() {
 			os.Exit(1)
 		}
 		FetchFromFile(flag.Arg(1))
-		os.Exit(0)
-
-	case "collect-feeds":
-		CollectFromFeeds()
-		os.Exit(0)
 
 	case "collect-profiles":
 		CollectFromProfiles()
-		os.Exit(0)
 
 	default:
 		fmt.Printf("Unknown command: %s\n", flag.Arg(0))

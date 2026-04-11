@@ -16,6 +16,7 @@ import (
 	"github.com/bluesky-social/indigo/xrpc"
 )
 
+// NewClient creates a new Bluesky client.
 func NewClient(handle, appPassword string) (*Client, error) {
 	xrpcClient := &xrpc.Client{Host: "https://bsky.social"}
 
@@ -455,39 +456,6 @@ func extractLinksView(postView *bsky.FeedDefs_PostView) []schwartz.PostLink {
 	return links
 }
 
-func extractImages(post *bsky.FeedPost) []schwartz.PostImage {
-	var images []schwartz.PostImage
-	if post.Embed == nil || post.Embed.EmbedImages == nil {
-		return images
-	}
-	for _, img := range post.Embed.EmbedImages.Images {
-		images = append(images, schwartz.PostImage{
-			Alt:   img.Alt,
-			Image: img.Image.Ref.String(),
-		})
-	}
-	return images
-}
-
-func extractLinks(post *bsky.FeedPost) []schwartz.PostLink {
-	var links []schwartz.PostLink
-	if post.Embed == nil || post.Embed.EmbedExternal == nil {
-		return links
-	}
-	ext := post.Embed.EmbedExternal.External
-	thumb := ""
-	if ext.Thumb != nil {
-		thumb = ext.Thumb.Ref.String()
-	}
-	links = append(links, schwartz.PostLink{
-		Uri:         ext.Uri,
-		Title:       ext.Title,
-		Description: ext.Description,
-		Thumb:       thumb,
-	})
-	return links
-}
-
 func extractFacets(post *bsky.FeedPost) []schwartz.PostFacet {
 	var facets []schwartz.PostFacet
 	for _, facet := range post.Facets {
@@ -514,7 +482,7 @@ func extractFacets(post *bsky.FeedPost) []schwartz.PostFacet {
 	return facets
 }
 
-func SavePostsToJSON(filename string, data interface{}) error {
+func SavePostsToJSON(filename string, data any) error {
 	filename = fmt.Sprintf("%s_%s.json", filename, time.Now().Format("20060102150405"))
 	bytes, err := json.MarshalIndent(data, "", " ")
 	if err != nil {

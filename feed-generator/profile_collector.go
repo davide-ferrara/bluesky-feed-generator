@@ -16,6 +16,11 @@ import (
 	"golang.org/x/time/rate"
 )
 
+const (
+	MinEngagement = 0
+	TargetLang    = "en"
+)
+
 type ProfileConfig struct {
 	Name  string `json:"name"`
 	Type  string `json:"type"`
@@ -29,6 +34,7 @@ type ProfileCollector struct {
 	limiter  *rate.Limiter
 }
 
+// NewProfileCollector creates a new ProfileCollector from a profiles JSON file.
 func NewProfileCollector(client *Client, profilesFile string) (*ProfileCollector, error) {
 	data, err := os.ReadFile(profilesFile)
 	if err != nil {
@@ -49,6 +55,7 @@ func NewProfileCollector(client *Client, profilesFile string) (*ProfileCollector
 	}, nil
 }
 
+// Collect collects posts from all configured profiles.
 func (pc *ProfileCollector) Collect(ctx context.Context) (int, error) {
 	totalPosts := 0
 
@@ -65,7 +72,7 @@ func (pc *ProfileCollector) Collect(ctx context.Context) (int, error) {
 			continue
 		}
 
-		posts, err := pc.collectProfile(ctx, profile.Name, handle, profile.Limit)
+		posts, err := pc.collectProfile(ctx, handle, profile.Limit)
 		if err != nil {
 			fmt.Printf("  ERROR: %v\n", err)
 			continue
@@ -95,7 +102,78 @@ func (pc *ProfileCollector) Collect(ctx context.Context) (int, error) {
 	return totalPosts, nil
 }
 
-func (pc *ProfileCollector) collectProfile(ctx context.Context, name, handle string, limit int) ([]schwartz.Post, error) {
+// CollectWeighted collects posts in weighted distribution proportional to profile limits.
+func (pc *ProfileCollector) CollectWeighted(ctx context.Context, totalDesired int) (int, error) {
+	totalLimit := 0
+	for _, p := range pc.profiles {
+		totalLimit += p.Limit
+	}
+
+	if totalLimit == 0 {
+		return 0, fmt.Errorf("no profile limits defined")
+	}
+
+	quotaByProfile := make(map[string]int)
+	for _, p := range pc.profiles {
+		quota := int(float64(p.Limit) / float64(totalLimit) * float64(totalDesired))
+		if quota > 0 {
+			quotaByProfile[p.Name] = quota
+		}
+	}
+
+	fmt.Printf("Quota distribution:\n")
+	for name, quota := range quotaByProfile {
+		fmt.Printf("  %s: %d\n", name, quota)
+	}
+	fmt.Println()
+
+	totalPosts := 0
+
+	for i, profile := range pc.profiles {
+		quota := quotaByProfile[profile.Name]
+		if quota <= 0 {
+			continue
+		}
+
+		fmt.Printf("[%d/%d] %s (quota: %d)\n", i+1, len(pc.profiles), profile.Name, quota)
+
+		handle := extractHandleFromURL(profile.URL)
+		if handle == "" {
+			fmt.Printf("  ERROR: invalid profile URL: %s\n", profile.URL)
+			continue
+		}
+
+		posts, err := pc.collectProfile(ctx, handle, quota)
+		if err != nil {
+			fmt.Printf("  ERROR: %v\n", err)
+			continue
+		}
+
+		filtered := pc.filterPosts(posts)
+		fmt.Printf("  Fetched: %d, Filtered: %d\n", len(posts), len(filtered))
+
+		saved := 0
+		for _, post := range filtered {
+			if err := db.SavePost(post); err != nil {
+				if strings.Contains(err.Error(), "Post already exists") {
+					continue
+				}
+				fmt.Printf("  ERROR saving post: %v\n", err)
+				continue
+			}
+			saved++
+		}
+
+		fmt.Printf("  Saved: %d posts\n\n", saved)
+		totalPosts += saved
+	}
+
+	fmt.Printf("Total: %d posts saved\n", totalPosts)
+	return totalPosts, nil
+}
+
+// collectProfile fetches posts from a profile handle using pagination.
+func (pc *ProfileCollector) collectProfile(ctx context.Context, handle string, limit int) ([]schwartz.Post, error) {
 	allPosts := []schwartz.Post{}
 	cursor := ""
 	batchSize := 100
@@ -134,6 +212,7 @@ func (pc *ProfileCollector) collectProfile(ctx context.Context, name, handle str
 	return allPosts, nil
 }
 
+// filterPosts filters posts based on engagement (currently accepts all).
 func (pc *ProfileCollector) filterPosts(posts []schwartz.Post) []schwartz.Post {
 	filtered := []schwartz.Post{}
 
@@ -151,15 +230,7 @@ func (pc *ProfileCollector) filterPosts(posts []schwartz.Post) []schwartz.Post {
 	return filtered
 }
 
-func (pc *ProfileCollector) hasLang(post schwartz.Post, lang string) bool {
-	for _, l := range post.Langs {
-		if l == lang {
-			return true
-		}
-	}
-	return false
-}
-
+// extractHandleFromURL extracts the handle from a Bluesky profile URL.
 func extractHandleFromURL(url string) string {
 	re := regexp.MustCompile(`^https://bsky\.app/profile/([^/]+)$`)
 	matches := re.FindStringSubmatch(url)
@@ -169,13 +240,10 @@ func extractHandleFromURL(url string) string {
 	return matches[1]
 }
 
-func isProfileRateLimitError(err error) bool {
-	return strings.Contains(err.Error(), "429") ||
-		strings.Contains(err.Error(), "rate limit")
-}
-
+// CollectFromProfiles is the entry point for the CLI command.
+// If -total is specified, uses weighted distribution proportionally to profile limits.
 func CollectFromProfiles() {
-	if err := db.Init("../data.db"); err != nil {
+	if err := db.Init(DBPath); err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: could not init database: %v\n", err)
 		os.Exit(1)
 	}
@@ -188,7 +256,7 @@ func CollectFromProfiles() {
 		os.Exit(1)
 	}
 
-	profilesFile := "profiles.json"
+	profilesFile := ProfilesFile
 	if flag.NArg() > 1 {
 		profilesFile = flag.Arg(1)
 	}
@@ -199,8 +267,21 @@ func CollectFromProfiles() {
 		os.Exit(1)
 	}
 
-	if _, err := collector.Collect(ctx); err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
-		os.Exit(1)
+	if *collectTotal > 0 {
+		fmt.Printf("Using weighted collection for %d total posts...\n\n", *collectTotal)
+		if _, err := collector.CollectWeighted(ctx, *collectTotal); err != nil {
+			fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+			os.Exit(1)
+		}
+	} else {
+		if _, err := collector.Collect(ctx); err != nil {
+			fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+			os.Exit(1)
+		}
 	}
+}
+
+// isRateLimitError checks if the error is a rate limit error.
+func isRateLimitError(err error) bool {
+	return strings.Contains(err.Error(), "rate limit")
 }
