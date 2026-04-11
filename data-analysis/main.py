@@ -43,27 +43,6 @@ def main():
         output_path = plot_dir / f"distribution_{model_name.replace('/', '_')}.png"
         plot_bar_chart_faceted(values_distr, str(output_path), display_name)
 
-
-def main1():
-    # Connect to database
-    con = sqlite3.connect("../data.db")
-    cur = con.cursor()
-
-    # Create plot directory
-    plot_dir = Path("plot")
-    plot_dir.mkdir(exist_ok=True)
-
-    models = {
-        "openai/gpt-4o-mini": "GPT-4o-mini",
-        "mistralai/ministral-14b-2512": "Ministral-14b",
-        "Qwen/Qwen3-14B": "Qwen3-14B",
-    }
-
-    # Calculate statistics for each model
-    stats = {}
-    distributions = {}
-    total_scores = {}
-    for model_name, display_name in models.items():
         stats[display_name] = {
             "avg_values": calculate_values_avg(cur, model_name),
             "cost_stats": calculate_cost_stats(cur, model_name),

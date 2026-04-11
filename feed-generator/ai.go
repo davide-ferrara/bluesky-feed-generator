@@ -19,7 +19,7 @@ func NewOpenRouterClient(apiKey string) *OpenRouterClient {
 }
 
 func (c *OpenRouterClient) CreateChatCompletion(ctx context.Context, model string, content ChatContent) (*AIResponse, error) {
-	temperature := float32(0.7)
+	temperature := float32(0.3)
 
 	var msg openrouter.ChatCompletionMessage
 	if len(content.Images) > 0 {
@@ -57,7 +57,7 @@ func NewOpenAIClient(apiKey string, baseURL string) *OpenAIClient {
 }
 
 func (c *OpenAIClient) CreateChatCompletion(ctx context.Context, model string, content ChatContent) (*AIResponse, error) {
-	temperature := float64(0.7)
+	temperature := float64(0.3)
 
 	var msg openai.ChatCompletionMessageParamUnion
 	if len(content.Images) > 0 {
