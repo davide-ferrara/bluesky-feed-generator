@@ -6,45 +6,40 @@ from typing import Optional
 
 
 SCHWARTZ_CLUSTERS = {
-    "Openness to Change": {
-        "values": [
-            "Independent thoughts",
-            "Independent actions",
-            "Stimulation",
-            "Pleasure",
-        ],
-        "color": "#FF69B4",
-    },
-    "Self-Enhancement": {
-        "values": ["Achievement", "Power", "Wealth", "Reputation"],
-        "color": "#FFA500",
+    "Self-Transcendence": {
+        "values": ["Tolerance", "Nature", "Equality", "Caring", "Responsibility"],
+        "color": "#518B62",
     },
     "Conservation": {
         "values": [
-            "Personal security",
-            "Societal security",
-            "Tradition",
-            "Lawfulness",
-            "Respect",
             "Humility",
+            "Respect",
+            "Lawfulness",
+            "Tradition",
+            "Societal security",
+            "Personal security",
         ],
-        "color": "#4169E1",
+        "color": "#57B1E3",
     },
-    "Self-Transcendence": {
-        "values": ["Caring", "Responsibility", "Equality", "Nature", "Tolerance"],
-        "color": "#228B22",
+    "Self-Enhancement": {
+        "values": ["Reputation", "Achievement", "Power", "Wealth"],
+        "color": "#EF9E30",
+    },
+    "Openness to Change": {
+        "values": [
+            "Pleasure",
+            "Stimulation",
+            "Independent actions",
+            "Independent thoughts",
+        ],
+        "color": "#C676A2",
     },
 }
 
 MODEL_COLORS = {
-    "GPT": "#27AE60",
-    "GPT-4o-mini": "#27AE60",
-    "Mistral": "#FF6B35",
-    "Ministral-8b": "#FF6B35",
-    "Qwen": "#3498DB",
-    "Qwen3": "#3498DB",
-    "DeepSeek": "#2E86AB",
-    "DeepSeek-V3": "#2E86AB",
+    "GPT-4o-mini": "#189D7C",
+    "Ministral-14b": "#F87F06",
+    "Qwen3-14B": "#5E39D4",
 }
 
 
@@ -85,15 +80,13 @@ def plot_values_comparison(
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    bar_height = 0.35
+    bar_height = 0.5
     group_spacing = 0.2
-    cluster_gap = 1.2
+    cluster_gap = 0
 
     current_y = 0
     y_ticks = []
     y_labels = []
-
-    cluster_info_to_plot = []
 
     clusters_to_process = list(SCHWARTZ_CLUSTERS.items())[::-1]
 
@@ -104,20 +97,9 @@ def plot_values_comparison(
         if not available_vals:
             continue
 
-        cluster_start_y = current_y
-
         for val_name in available_vals[::-1]:
             for i, model in enumerate(models):
                 val_score = avg_values[model].get(val_name, 0)
-
-                # Try exact match first, then capitalize first letter
-                model_color = MODEL_COLORS.get(model)
-                if model_color is None:
-                    # Try with first part capitalized
-                    first_part = model.split("-")[0]
-                    model_color = MODEL_COLORS.get(first_part.capitalize())
-                if model_color is None:
-                    model_color = f"C{i}"
 
                 pos = current_y + (i * bar_height)
 
@@ -125,7 +107,7 @@ def plot_values_comparison(
                     pos,
                     val_score,
                     height=bar_height,
-                    color=model_color,
+                    color=cluster_data["color"],
                     edgecolor="white",
                     alpha=0.9,
                     label=model if current_y == 0 else "",
@@ -146,28 +128,38 @@ def plot_values_comparison(
 
             current_y += (n_models * bar_height) + group_spacing
 
-        cluster_end_y = current_y - group_spacing
-        cluster_info_to_plot.append(
-            {
-                "name": cluster_name,
-                "center": (cluster_start_y + cluster_end_y - bar_height) / 2,
-                "color": cluster_data["color"],
-                "start": cluster_start_y,
-                "end": cluster_end_y,
-            }
-        )
-
         current_y += cluster_gap
-
-    # Background colorato per cluster
-    for info in cluster_info_to_plot:
-        start_y = info["start"] - bar_height
-        end_y = info["end"] + bar_height
-        ax.axhspan(start_y, end_y, color=info["color"], alpha=0.08, zorder=0)
 
     ax.set_yticks(y_ticks)
     ax.set_yticklabels(y_labels, fontweight="bold", fontsize=10, color="black")
     ax.set_xlabel("Average Value (0-6)", fontsize=11, fontweight="bold")
+
+    if n_models == 1:
+        y_line = 6.0
+    else:
+        y_line = 13.25
+
+    ax.text(
+        5,
+        y_line + 0.4,
+        "Social Focus",
+        va="center",
+        ha="left",
+        fontweight="bold",
+        fontsize=16,
+        color="black",
+    )
+    ax.axhline(y=y_line, linestyle="--", color="black", linewidth=1.5, alpha=1.0)
+    ax.text(
+        5,
+        y_line - 0.4,
+        "Personal Focus",
+        va="center",
+        ha="left",
+        fontweight="bold",
+        fontsize=16,
+        color="black",
+    )
     ax.set_title(title, fontsize=16, fontweight="bold", pad=25)
     ax.set_xlim(0, 6)
 
@@ -431,30 +423,30 @@ def plot_total_score_histogram(
 ) -> None:
     """
     Generate histogram showing distribution of total scores across models.
-    
+
     Args:
         score_data: {"Model1": [score1, score2, ...], "Model2": [...]}
         output_path: Where to save the PNG
         title: Title for the plot
     """
     models = list(score_data.keys())
-    
+
     fig, ax = plt.subplots(figsize=(12, 7))
-    
+
     # Colors for each model
-    colors = ['#27AE60', '#FF6B35', '#3498DB', '#9B59B6', '#E74C3C', '#F39C12']
-    
+    colors = ["#27AE60", "#FF6B35", "#3498DB", "#9B59B6", "#E74C3C", "#F39C12"]
+
     # Plot histogram for each model
     for i, model in enumerate(models):
         scores = score_data[model]
         if len(scores) == 0:
             continue
-        
+
         # Calculate statistics
         avg = sum(scores) / len(scores) if scores else 0
         min_score = min(scores) if scores else 0
         max_score = max(scores) if scores else 0
-        
+
         # Plot histogram with transparency
         ax.hist(
             scores,
@@ -462,35 +454,36 @@ def plot_total_score_histogram(
             alpha=0.5,
             label=f"{model} (avg: {avg:.1f}, n={len(scores)})",
             color=colors[i % len(colors)],
-            edgecolor='black',
-            linewidth=0.5
+            edgecolor="black",
+            linewidth=0.5,
         )
-    
-    ax.set_xlabel('Total Score (sum of 19 values)', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Number of Posts', fontsize=12, fontweight='bold')
-    ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+
+    ax.set_xlabel("Total Score (sum of 19 values)", fontsize=12, fontweight="bold")
+    ax.set_ylabel("Number of Posts", fontsize=12, fontweight="bold")
+    ax.set_title(title, fontsize=14, fontweight="bold", pad=20)
     ax.set_xlim(0, 114)
-    
+
     # Add legend
-    ax.legend(loc='upper right', frameon=True, fontsize=10)
-    
+    ax.legend(loc="upper right", frameon=True, fontsize=10)
+
     # Add grid
-    ax.grid(axis='y', alpha=0.3)
-    
+    ax.grid(axis="y", alpha=0.3)
+
     # Add interpretation note
     ax.text(
-        0.5, -0.1,
+        0.5,
+        -0.1,
         "Lower scores = Posts with fewer values expressed\n"
         "Higher scores = Posts with more values expressed (0-114 range)",
         transform=ax.transAxes,
-        ha='center',
+        ha="center",
         fontsize=9,
-        style='italic',
-        color='gray'
+        style="italic",
+        color="gray",
     )
-    
+
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
     plt.close()
-    
+
     print(f"Total score histogram saved to: {output_path}")
