@@ -2,6 +2,73 @@
 
 import sqlite3
 
+# def count_values(cur: sqlite3.Cursor, model: str) -> dict[str, float]:
+def count_values(cur: sqlite3.Cursor, model: str):
+    """Count values occurence for each post from SQL database."""
+    # Database column names (snake_case) - order matches Go code
+    db_columns = [
+        "reputation",
+        "power",
+        "wealth",
+        "achievement",
+        "pleasure",
+        "independent_thoughts",
+        "independent_actions",
+        "stimulation",
+        "personal_security",
+        "societal_security",
+        "tradition",
+        "lawfulness",
+        "respect",
+        "humility",
+        "responsibility",
+        "caring",
+        "equality",
+        "nature",
+        "tolerance",
+    ]
+
+    # Display names expected by plot function (Title Case)
+    display_names = {
+        "reputation": "Reputation",
+        "power": "Power",
+        "wealth": "Wealth",
+        "achievement": "Achievement",
+        "pleasure": "Pleasure",
+        "independent_thoughts": "Independent thoughts",
+        "independent_actions": "Independent actions",
+        "stimulation": "Stimulation",
+        "personal_security": "Personal security",
+        "societal_security": "Societal security",
+        "tradition": "Tradition",
+        "lawfulness": "Lawfulness",
+        "respect": "Respect",
+        "humility": "Humility",
+        "responsibility": "Responsibility",
+        "caring": "Caring",
+        "equality": "Equality",
+        "nature": "Nature",
+        "tolerance": "Tolerance",
+    }
+
+    data = dict()
+
+    # Build query
+    value_distribution = []
+    for value in db_columns:
+        res = []
+        for i in range(0, 6+1):
+
+            query = f"SELECT COUNT(*), a.{value} FROM ANALYSES AS a WHERE model=? AND a.{value} = {i}"
+            cur.execute(query, (model,))
+            row = cur.fetchone()
+            res.append(row[0])
+
+        data[display_names[value]] = res
+    value_distribution.append(data)
+
+    return value_distribution
+
 
 def calculate_values_avg(cur: sqlite3.Cursor, model: str) -> dict[str, float]:
     """Calculate average values for each Schwartz dimension from SQL database."""

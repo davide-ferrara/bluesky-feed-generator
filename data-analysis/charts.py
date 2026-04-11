@@ -5,7 +5,6 @@ import numpy as np
 from matplotlib.patches import Patch
 from typing import Optional
 
-
 SCHWARTZ_CLUSTERS = {
     "Self-Transcendence": {
         "values": ["Tolerance", "Nature", "Equality", "Caring", "Responsibility"],
@@ -42,6 +41,61 @@ MODEL_COLORS = {
     "Ministral-14b": "#F87F06",
     "Qwen3-14B": "#5E39D4",
 }
+
+
+def plot_bar_chart_faceted(
+    data: dict[str, list[int]], output_path: str, title: str = None
+):
+    """
+    Crea un faceted plot con 19 mini bar chart (5x4 grid) per un singolo modello.
+
+    Args:
+        data: {value: [count_0, ..., count_6]}
+              Es: {"Humility": [33, 9, 44, ...], "Power": [...]}
+        output_path: Path dove salvare il PNG
+        title: Titolo del grafico (default: "Value Distribution")
+    """
+    if not data:
+        print("No data to plot")
+        return
+
+    values = list(data.keys())
+    n_values = len(values)
+
+    # Grid: 5x4 = 20 slots (19 used)
+    nrows, ncols = 5, 4
+    fig, axes = plt.subplots(nrows, ncols, figsize=(16, 18))
+    axes = axes.flatten()
+
+    x = np.arange(7)  # 0-6
+
+    # Color by model
+    model_color = "#189D7C"  # Default green
+
+    for idx, value in enumerate(values):
+        ax = axes[idx]
+        counts = data.get(value, [0] * 7)
+
+        ax.bar(x, counts, width=0.8, color=model_color, edgecolor="white")
+
+        ax.set_title(value, fontsize=9, fontweight="bold")
+        ax.set_xticks(x)
+        ax.set_xticklabels([str(v) for v in range(7)], fontsize=7)
+        ax.set_ylabel("Count", fontsize=7)
+        ax.grid(axis="y", alpha=0.3)
+
+    # Hide unused subplots
+    for idx in range(n_values, nrows * ncols):
+        axes[idx].set_visible(False)
+
+    fig.suptitle(
+        title or "Value Distribution (0-6)", fontsize=14, fontweight="bold", y=0.98
+    )
+    plt.tight_layout(rect=(0, 0, 1, 0.96))
+    plt.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close()
+
+    print(f"Faceted chart saved to: {output_path}")
 
 
 def plot_values_comparison(

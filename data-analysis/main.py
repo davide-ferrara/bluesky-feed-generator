@@ -9,9 +9,14 @@ from db_stats import (
     calculate_time_stats,
     calculate_score_distribution,
     calculate_total_score_distribution,
+    count_values,
 )
 from export import save_to_csv, generate_plots
-from charts import plot_score_distribution_heatmap, plot_total_score_histogram
+from charts import (
+    plot_score_distribution_heatmap,
+    plot_total_score_histogram,
+    plot_bar_chart_faceted,
+)
 
 
 def main():
@@ -23,15 +28,35 @@ def main():
     plot_dir = Path("plot")
     plot_dir.mkdir(exist_ok=True)
 
-    # Model name mapping (technical name -> display name)
-    # To change models, modify this dictionary
     models = {
         "openai/gpt-4o-mini": "GPT-4o-mini",
         "mistralai/ministral-14b-2512": "Ministral-14b",
         "Qwen/Qwen3-14B": "Qwen3-14B",
-        # "anthropic/claude-sonnet-4.6": "Claude 4",
-        # "openai/gpt-4.1": "GPT-4.1",
-        # Add more models here as needed
+    }
+
+    # Calculate statistics for each model
+    stats = {}
+    distributions = {}
+    total_scores = {}
+    for model_name, display_name in models.items():
+        values_distr = count_values(cur, model_name)[0]  # Extract dict from list
+        output_path = plot_dir / f"distribution_{model_name.replace('/', '_')}.png"
+        plot_bar_chart_faceted(values_distr, str(output_path), display_name)
+
+
+def main1():
+    # Connect to database
+    con = sqlite3.connect("../data.db")
+    cur = con.cursor()
+
+    # Create plot directory
+    plot_dir = Path("plot")
+    plot_dir.mkdir(exist_ok=True)
+
+    models = {
+        "openai/gpt-4o-mini": "GPT-4o-mini",
+        "mistralai/ministral-14b-2512": "Ministral-14b",
+        "Qwen/Qwen3-14B": "Qwen3-14B",
     }
 
     # Calculate statistics for each model
