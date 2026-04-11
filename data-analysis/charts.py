@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -103,11 +104,16 @@ def plot_values_comparison(
 
                 pos = current_y + (i * bar_height)
 
+                if n_models <= 2:
+                    bar_color = cluster_data["color"]
+                else:
+                    bar_color = MODEL_COLORS.get(model, cluster_data["color"])
+
                 ax.barh(
                     pos,
                     val_score,
                     height=bar_height,
-                    color=cluster_data["color"],
+                    color=bar_color,
                     edgecolor="white",
                     alpha=0.9,
                     label=model if current_y == 0 else "",
@@ -161,13 +167,17 @@ def plot_values_comparison(
         color="black",
     )
     ax.set_title(title, fontsize=16, fontweight="bold", pad=25)
-    ax.set_xlim(0, 6)
+    ax.set_xlim(0, 6.5)
 
     # Legenda modelli in alto a destra
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     ax.legend(
-        by_label.values(), by_label.keys(), loc="upper right", frameon=True, shadow=True
+        by_label.values(),
+        by_label.keys(),
+        loc="upper right",
+        frameon=True,
+        shadow=True,
     )
 
     # Legenda cluster in alto a sinistra
