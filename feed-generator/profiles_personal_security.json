@@ -1,9 +1,0 @@
-{
-  "profiles": [
-    {"name": "Boston Police", "type": "personal_security", "url": "https://bsky.app/profile/police.boston.gov", "limit": 20},
-    {"name": "GOP Crimes", "type": "personal_security", "url": "https://bsky.app/profile/gopcrimes.bsky.social", "limit": 20},
-    {"name": "Red Cross Canada", "type": "personal_security", "url": "https://bsky.app/profile/redcrosscanada.bsky.social", "limit": 15},
-    {"name": "Cybersecurity", "type": "personal_security", "url": "https://bsky.app/profile/cybersecurity.page", "limit": 15},
-    {"name": "Ransomware Live", "type": "personal_security", "url": "https://bsky.app/profile/ransomware.live", "limit": 15}
-  ]
-}

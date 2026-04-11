@@ -209,3 +209,9 @@ The final score is the weighted sum: `score = Σ(value_i × weight_i)`.
 ### Database migrations
 - Edit `db/db.go` `createTables()` function
 - SQLite uses `CREATE TABLE IF NOT EXISTS` for idempotency
+
+### Code Organization
+
+- Important functions first, helper functions at bottom
+- Important: Prompt caching with sync.Map to avoid repeated file reads
+- Use package alias `bsky-schwartz` → `bskySchwartz` to match common convention

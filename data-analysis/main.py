@@ -28,7 +28,7 @@ def main():
     models = {
         "openai/gpt-4o-mini": "GPT-4o-mini",
         "mistralai/ministral-14b-2512": "Ministral-14b",
-        "Qwen/Qwen3-VL-8B-Instruct": "Qwen-3",
+        "Qwen/Qwen3-14B": "Qwen3-14B",
         # "anthropic/claude-sonnet-4.6": "Claude 4",
         # "openai/gpt-4.1": "GPT-4.1",
         # Add more models here as needed
