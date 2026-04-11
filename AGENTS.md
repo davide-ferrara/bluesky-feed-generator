@@ -215,3 +215,32 @@ The final score is the weighted sum: `score = Σ(value_i × weight_i)`.
 - Important functions first, helper functions at bottom
 - Important: Prompt caching with sync.Map to avoid repeated file reads
 - Use package alias `bsky-schwartz` → `bskySchwartz` to match common convention
+
+### Important Patterns: Flag Parsing
+
+Go's `flag` package parses flags positionally. Flags MUST come BEFORE the subcommand:
+
+```bash
+./bin/feedgen -model=qwen3-14b analyze  # OK - model set before "analyze"
+./bin/feedgen analyze -model=qwen3-14b    # WRONG - flags ignored, parsed as positional args
+./bin/feedgen -total 100 -n 50 collect-profiles  # OK
+```
+
+### Models
+
+All currently configured models use temperature 0.7 (hardcoded in ai.go).
+
+| Model          | Provider   | Parameters | Vision |
+| -------------- | ---------- | ---------- | ------- |
+| gpt-4o-mini    | OpenRouter | ~800M      | Yes     |
+| ministral-8b   | OpenRouter | 14B        | Yes     |
+| qwen3-14b     | SiliconF.  | 14B        | No      |
+
+### Weighted Collection
+
+When using `-total N` flag, posts are distributed proportionally across profiles based on their limits:
+
+```bash
+./bin/feedgen -total 100 -n 50 collect-profiles
+# Collects 50 posts proportionally (not evenly) across all profiles
+```

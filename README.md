@@ -1,94 +1,72 @@
 # Bluesky Schwartz
 
-AI-powered social media content analysis based on Schwartz Theory of Basic Human Values.
+Analisi AI di contenuti social basata sulla Teoria dei Valori Fondamentali di Schwartz (19 valori).
 
-## Overview
+## Cos'è
 
-Analizza post di Bluesky utilizzando i 19 valori fondamentali di Schwartz attraverso AI (OpenRouter).
+Analizza post Bluesky usando i 19 valori fondamentali di Schwartz tramite AI. Ogni post viene scored 0-6 per valore, poi pesato per generare feed personalizzati.
 
 ## Flusso
 
 ```
-Post URL → Fetch Bluesky → Build Prompt → AI Analysis → JSON Output
+Post Bluesky → Fetch → AI Analysis → Score → Feed Personalizzato
 ```
 
-1. Fetch post da Bluesky (testo, link, metadata)
-2. Costruisce prompt con dati post  
-3. Chiama OpenRouter AI per analisi
-4. Salva risultati in JSON
+## Screenshots
 
-## Struttura
+### Feed Conservatore
 
-```
-feed-generator/
-├── main.go           # Entry point
-├── client.go         # Bluesky client + estrazione dati
-├── valueAnalysis.go  # AI analysis (OpenRouter)
-├── prompts/
-│   └── PROMPT_V3.md  # Prompt Schwartz values
-└── feed/             # Feed URLs
+| Sliders | Feed |
+|---------|------|
+| ![Conservative Sliders](docs/conservative_sliders.png) | ![Conservative Feed](docs/conservative_feed.png) |
+
+### Feed Progressista
+
+| Sliders | Feed |
+|---------|------|
+| ![Progressive Sliders](docs/progressist_sliders.png) | ![Progressive Feed](docs/progressist_feed.png) |
+
+## Schema Valori
+
+| Cluster | Valori |
+|---------|--------|
+| Apertura al Cambiamento | Autodirezione, Stimolazione, Edonismo |
+| Autovalorizzazione | Achievement, Potere, Immagine, Ricchezza |
+| Conservatorismo | Sicurezza, Conformità, Tradizione |
+| Autotrascendenza | Benevolenza, Universalismo, Natura |
+
+19 valori totali (vedi [values_table.png](docs/values_table.png)).
+
+## Utilizzo
+
+```bash
+# Raccogli post
+./bin/feedgen -n 50 collect-profiles
+
+# Analizza
+./bin/feedgen -model=gpt-4o-mini analyze
+
+# Avvia feed
+cd feed-service && make run
 ```
 
 ## Setup
 
-### Prerequisites
-
-- Go 1.21+
-- Bluesky account con app password
-- OpenRouter API key
-
-### Environment Variables
-
-Creare `.env` in `feed-generator/`:
-
 ```bash
+# Variabili ambiente
 BSKY_HANDLE=tuo_handle.bsky.social
-BSKY_APP_PASSWORD=tua_app_password
-OPEN_ROUTER_KEY=tua_openrouter_key
+BSKY_APP_PASSWORD=tua_password
+OPEN_ROUTER_KEY=tua_key
 ```
 
-## Usage
+## Struttura
 
-```bash
-cd feed-generator
-make build  # compila
-make run    # esegue
 ```
-
-## Output
-
-`Posts_TIMESTAMP.json` con:
-
-```json
-{
-  "AtURI": "at://did:plc:.../app.bsky.feed.post/...",
-  "Text": "...",
-  "AuthorName": "...",
-  "Links": [...],
-  "ValueAnalysis": {
-    "Rating": {
-      "Reputation": 0,
-      "Power": 2,
-      ...
-    },
-    "Reasoning": "...",
-    "Stats": {
-      "model": "openai/gpt-4o-mini",
-      "response_time_ms": 2340,
-      "cost_usd": 0.0012
-    }
-  }
-}
+feed-generator/    # CLI
+feed-service/      # Server HTTP
+data.db           # SQLite
+data-analysis/    # Analisi Python
 ```
-
-## Schwartz Values (19)
-
-| Cluster | Values |
-|---------|--------|
-| Openness to Change | Independent thoughts, Independent actions, Stimulation, Pleasure |
-| Self-Enhancement | Achievement, Power, Wealth, Reputation |
-| Conservation | Personal security, Societal security, Tradition, Lawfulness, Respect, Humility |
-| Self-Transcendence | Caring, Responsibility, Equality, Nature, Tolerance |
 
 ## License
 

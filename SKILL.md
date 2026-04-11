@@ -35,22 +35,29 @@ cd feed-generator && make build
 
 ## Flags
 
-| Flag      | Default | Description                    |
-| --------- | ------- | ------------------------------ |
-| `-n`      | 40      | Number of posts to collect     |
-| `-l`      | 0       | Limit posts to analyze (0=all) |
-| `-model`  | ""      | Filter by model name           |
-| `-sample` | 0       | Random sample size             |
-| `-images` | true    | Include images in analysis     |
-| `-limit`  | 0       | Posts per model                |
+| Flag      | Default | Description                          |
+| --------- | ------- | ------------------------------------ |
+| `-n`      | 40      | Number of posts to collect           |
+| `-l`      | 0       | Limit posts to analyze (0=all)      |
+| `-model`  | ""      | Filter by model name                 |
+| `-sample` | 0       | Random sample size                  |
+| `-images` | true    | Include images in analysis          |
+| `-limit`  | 0       | Posts per model                     |
+| `-total`  | 0       | Total posts for weighted collection |
+
+**Important**: Flags must come BEFORE subcommand:
+```bash
+./bin/feedgen -model=qwen3-14b analyze  # OK
+./bin/feedgen analyze -model=qwen3-14b  # WRONG
+```
 
 ## Models
 
 | Model          | Provider    | Images | Notes                    |
 | -------------- | ----------- | ------ | ------------------------ |
 | gpt-4o-mini    | OpenRouter  | ✅     | Default, reliable        |
-| ministral-3-14b | OpenRouter | ✅     | Cheap, EU                |
-| qwen3-vl-8b    | SiliconFlow | ✅     | Chinese vision           |
+| ministral-8b   | OpenRouter | ✅     | Cheap, EU                |
+| qwen3-14b     | SiliconFlow | ❌     | Text-only, 14B params    |
 
 ## Database
 
@@ -123,8 +130,15 @@ Output: `data-analysis/plot/*.png`, `*.csv`
 ### Re-analyze all posts with new model
 
 ```bash
-sqlite3 data.db "DELETE FROM analyses WHERE model = 'mistralai/ministral-8b-2512';"
-./bin/feedgen -model=ministral-8b analyze
+sqlite3 data.db "DELETE FROM analyses WHERE model = 'qwen3-14b';"
+./bin/feedgen -model=qwen3-14b analyze
+```
+
+### Weighted collection (proportional distribution)
+
+```bash
+./bin/feedgen -total 100 -n 50 collect-profiles
+# Distributes 50 posts proportionally across profiles based on their limits
 ```
 
 ### Check value distribution
