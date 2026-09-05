@@ -1,73 +1,101 @@
-# Bluesky Schwartz
+# Value-Aligned Bluesky Feed Generator
 
-Analisi AI di contenuti social basata sulla Teoria dei Valori Fondamentali di Schwartz (19 valori).
+An applied AI project that analyses Bluesky posts through Schwartz's theory of 19 basic human values and generates personalised feeds from user-defined preferences.
 
-## Cos'è
+The project extends the value-ranking system developed for my [Computer Science thesis](https://github.com/davide-ferrara/feed-analysis), which replicated a CHI '26 study on Instagram.
 
-Analizza post Bluesky usando i 19 valori fondamentali di Schwartz tramite AI. Ogni post viene scored 0-6 per valore, poi pesato per generare feed personalizzati.
+## What it does
 
-## Flusso
-
+```text
+Bluesky posts -> collection -> multimodal AI classification -> value scores -> personalised feed
 ```
-Post Bluesky → Fetch → AI Analysis → Score → Feed Personalizzato
-```
+
+- Collects posts and metadata through the Bluesky AT Protocol.
+- Classifies text and images across 19 Schwartz values on a 0 to 6 scale.
+- Stores posts, classifications and model reasoning in SQLite.
+- Ranks content with a weighted score based on the user's value preferences.
+- Serves the resulting feed through an HTTP service and web interface.
 
 ## Screenshots
 
-### Feed Conservatore
+### Conservative preferences
 
-| Sliders | Feed |
-|---------|------|
-| ![Conservative Sliders](docs/conservative_sliders.png) | ![Conservative Feed](docs/conservative_feed.png) |
+| Preference sliders | Resulting feed |
+|---|---|
+| ![Conservative preference sliders](docs/conservative_sliders.png) | ![Conservative personalised feed](docs/conservative_feed.png) |
 
-### Feed Progressista
+### Progressive preferences
 
-| Sliders | Feed |
-|---------|------|
-| ![Progressive Sliders](docs/progressist_sliders.png) | ![Progressive Feed](docs/progressist_feed.png) |
+| Preference sliders | Resulting feed |
+|---|---|
+| ![Progressive preference sliders](docs/progressist_sliders.png) | ![Progressive personalised feed](docs/progressist_feed.png) |
 
-## Schema Valori
+## Value framework
 
-| Cluster | Valori |
-|---------|--------|
-| Apertura al Cambiamento | Autodirezione, Stimolazione, Edonismo |
-| Autovalorizzazione | Achievement, Potere, Immagine, Ricchezza |
-| Conservatorismo | Sicurezza, Conformità, Tradizione |
-| Autotrascendenza | Benevolenza, Universalismo, Natura |
+| Higher-order cluster | Example values |
+|---|---|
+| Openness to change | Self-direction, stimulation, hedonism |
+| Self-enhancement | Achievement, power, face, resources |
+| Conservation | Security, conformity, tradition |
+| Self-transcendence | Benevolence, universalism, care for nature |
 
-19 valori totali (vedi [values_table.png](docs/values_table.png)).
+See the complete [19-value framework](docs/values_table.png).
 
-## Utilizzo
+## Project structure
+
+```text
+feed-generator/   CLI for collecting and classifying posts
+feed-service/     HTTP feed generator and web application
+db/               shared SQLite data layer
+pkg/schwartz/     shared value types and scoring structures
+data-analysis/    Python analysis and visualisation scripts
+```
+
+The main application is written in Go. The classifier can use configured hosted AI models through OpenRouter or SiliconFlow, while SQLite provides local persistence.
+
+## Running the classifier
+
+Requires Go 1.26 and a Bluesky app password.
+
+Create `feed-generator/.env`:
+
+```env
+BSKY_HANDLE=your-handle.bsky.social
+BSKY_APP_PASSWORD=your-app-password
+OPEN_ROUTER_KEY=your-openrouter-key
+SILICONFLOW_API_KEY=your-siliconflow-key
+```
+
+Build the CLI:
 
 ```bash
-# Raccogli post
-./bin/feedgen -n 50 collect-profiles
+cd feed-generator
+make build
+```
 
-# Analizza
+Collect posts from the configured profiles:
+
+```bash
+./bin/feedgen -total 100 collect-profiles
+```
+
+Classify the collected posts:
+
+```bash
 ./bin/feedgen -model=gpt-4o-mini analyze
-
-# Avvia feed
-cd feed-service && make run
 ```
 
-## Setup
+Flags must appear before the subcommand because the CLI uses Go's standard `flag` package.
+
+## Running the feed service
+
+Configure the service as described in [`feed-service/README.md`](feed-service/README.md), then run:
 
 ```bash
-# Variabili ambiente
-BSKY_HANDLE=tuo_handle.bsky.social
-BSKY_APP_PASSWORD=tua_password
-OPEN_ROUTER_KEY=tua_key
-```
-
-## Struttura
-
-```
-feed-generator/    # CLI
-feed-service/      # Server HTTP
-data.db           # SQLite
-data-analysis/    # Analisi Python
+cd feed-service
+make run
 ```
 
 ## License
 
-MIT
+[MIT](LICENSE)
